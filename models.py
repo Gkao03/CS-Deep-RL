@@ -72,3 +72,19 @@ class ValueNet(nn.Module):
         out = self.conv3(out)
 
         return out
+
+
+class FCN(nn.Module):
+    def __init__(self, action_size):
+        super(FCN, self).__init__()
+
+        self.shared_net = SharedNet()
+        self.policy_net = PolicyNet(action_size)
+        self.value_net = ValueNet()
+
+    def forward(self, x):
+        out = self.shared_net(x)
+        policy = self.policy_net(out)
+        value = self.value_net(out)
+
+        return policy, value
