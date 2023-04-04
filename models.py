@@ -28,3 +28,28 @@ class SharedNet(nn.Module):
         out = self.act4(self.conv4(out))
 
         return out
+
+
+class PolicyNet(nn.Module):
+    def __init__(self, action_size):
+        super(PolicyNet, self).__init__()
+
+        self.conv1 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, padding='same', dilation=3)
+        self.act1 = nn.ReLU()
+
+        self.conv2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, padding='same', dilation=2)
+        self.act2 = nn.ReLU()
+
+        self.conv3 = ConvGRU(input_size=64, hidden_size=64, kernel_size=3, n_layers=1)
+
+        self.conv4 = nn.Conv2d(in_channels=64, out_channels=action_size, kernel_size=3, padding='same', dilation=1)
+        self.act4 = nn.Softmax()
+
+    def forward(self, x):
+        out = self.act1(self.conv1(x))
+        out = self.act2(self.conv2(out))
+        out = self.conv3(out)
+        out = self.act4(self.conv4(out))
+
+        return out
+        
