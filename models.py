@@ -52,4 +52,23 @@ class PolicyNet(nn.Module):
         out = self.act4(self.conv4(out))
 
         return out
-        
+
+
+class ValueNet(nn.Module):
+    def __init__(self):
+        super(ValueNet, self).__init__()
+
+        self.conv1 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, padding='same', dilation=3)
+        self.act1 = nn.ReLU()
+
+        self.conv2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, padding='same', dilation=2)
+        self.act2 = nn.ReLU()
+
+        self.conv3 = nn.Conv2d(in_channels=64, out_channels=1, kernel_size=3, padding='same', dilation=1)
+
+    def forward(self, x):
+        out = self.act1(self.conv1(x))
+        out = self.act2(self.conv2(out))
+        out = self.conv3(out)
+
+        return out
