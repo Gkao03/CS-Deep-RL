@@ -1,5 +1,6 @@
 import pfrl
 import torch
+from pfrl.agents import A2C
 from models import FCN
 
 
