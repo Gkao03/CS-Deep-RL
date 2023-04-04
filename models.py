@@ -48,7 +48,7 @@ class PolicyNet(nn.Module):
     def forward(self, x):
         out = self.act1(self.conv1(x))
         out = self.act2(self.conv2(out))
-        out = self.conv3(out)
+        out = self.conv3(out)[0]  # returns list. using 1 layer so take index 0
         out = self.act4(self.conv4(out))
 
         return out
