@@ -40,7 +40,7 @@ class PolicyNet(nn.Module):
         self.conv2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=3, padding='same', dilation=2)
         self.act2 = nn.ReLU()
 
-        self.conv3 = ConvGRU(input_size=64, hidden_size=64, kernel_size=3, n_layers=1)
+        self.conv3 = ConvGRU(input_size=64, hidden_sizes=64, kernel_sizes=3, n_layers=1)
 
         self.conv4 = nn.Conv2d(in_channels=64, out_channels=action_size, kernel_size=3, padding='same', dilation=1)
         self.act4 = nn.Softmax()
