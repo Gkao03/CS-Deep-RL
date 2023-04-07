@@ -9,4 +9,7 @@ class MyEnvironment():
     def reset(self):
         image_state, self.image_target = next(self.dataloader)
         return image_state
-
+    
+    def step(self, action):
+        # return observation, reward, done, reset
+        pass
