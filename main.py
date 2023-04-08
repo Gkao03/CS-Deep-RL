@@ -2,6 +2,7 @@ import pfrl
 import torch
 from pfrl.agents import A2C
 from models import FCN
+from config import Args
 
 
 if __name__ == '__main__':
