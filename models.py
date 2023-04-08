@@ -91,9 +91,9 @@ class FCN(nn.Module):
 
 
 class RewardConv(nn.Module):
-    def __init__(self):
+    def __init__(self, kernel_size):
         super(RewardConv, self).__init__()
-        self.reward_conv = nn.Conv2d(in_channels=1, out_channels=1, kernel_size=33, padding='same', dilation=1)
+        self.reward_conv = nn.Conv2d(in_channels=1, out_channels=1, kernel_size=kernel_size, padding='same', dilation=1)
 
     def forward(self, R):
         out = self.reward_conv(R)
