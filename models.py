@@ -88,3 +88,13 @@ class FCN(nn.Module):
         value = self.value_net(out)
 
         return policy, value
+
+
+class RewardConv(nn.Module):
+    def __init__(self):
+        super(RewardConv, self).__init__()
+        self.reward_conv = nn.Conv2d(in_channels=1, out_channels=1, kernel_size=33, padding='same', dilation=1)
+
+    def forward(self, R):
+        out = self.reward_conv(R)
+        return out
