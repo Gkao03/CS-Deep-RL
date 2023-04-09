@@ -15,7 +15,7 @@ class A_transform:
         self.A = torch.tensor(A, dtype=torch.float)
 
     def __call__(self, image):
-        x = torch.flatten(image, start_dim=0, end_dim=-1)
+        x = torch.flatten(image, start_dim=1, end_dim=-1)
         x = torch.unsqueeze(x, dim=-1)
         y = torch.matmul(self.A, x)
         return y
@@ -34,7 +34,7 @@ class MyCSDataset(Dataset):
         image = Image.open(self.image_files[idx])
         image_x = self.transform(image) if self.transform else image
         flat_y = self.A_transform(image_x)
-        flat_x = torch.flatten(image_x, start_dim=0, end_dim=-1).unsqueeze(-1)
+        flat_x = torch.flatten(image_x, start_dim=1, end_dim=-1).unsqueeze(-1)
 
         return image_x, flat_x, flat_y
 
