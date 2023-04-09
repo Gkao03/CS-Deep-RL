@@ -6,3 +6,5 @@ class Args:
         self.lr_init = 1e-3
         self.image_size = 64
         self.gamma = 0.9
+        self.n = self.image_size ** 2
+        self.m = int(0.2 * self.n)
