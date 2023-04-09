@@ -1,5 +1,6 @@
 class Args:
     def __init__(self):
+        self.seed = 2023
         self.tmax = 5
         self.Tmax = 150000
         self.w_filter_size = 33
