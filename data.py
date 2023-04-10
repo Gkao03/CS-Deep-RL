@@ -64,3 +64,21 @@ def get_transform(image_size):
 def get_cs_dataloader(dataset, batch_size, num_workers):
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
     return dataloader
+
+
+def calc_Qinit(dataloader, device="cpu"):
+    xs = []
+    ys = []
+
+    for _, flat_x, flat_y in dataloader:
+        xs.append(torch.squeeze(flat_x))
+        ys.append(torch.squeeze(flat_y))
+
+    X = torch.stack(xs, dim=1).to(device)
+    Y = torch.stack(ys, dim=1).to(device)
+
+    YYT_inv = torch.inverse(torch.matmul(Y, Y.t()))
+    XYT = torch.matmul(X, Y.t())
+    Qinit = torch.matmul(XYT, YYT_inv)
+
+    return Qinit.cpu()
