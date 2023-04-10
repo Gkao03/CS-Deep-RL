@@ -87,7 +87,8 @@ class FCN(nn.Module):
         policy = self.policy_net(out)
         value = self.value_net(out)
 
-        return policy, value
+        policy_permute = torch.permute(policy, (0, 2, 3, 1))
+        return torch.distributions.Categorical(policy_permute), value
 
 
 class RewardConv(nn.Module):
