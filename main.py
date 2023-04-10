@@ -1,5 +1,6 @@
 import pfrl
 import torch
+import torch.optim as optim
 import numpy as np
 from pfrl.agents import A2C
 from models import FCN
@@ -25,9 +26,8 @@ if __name__ == '__main__':
     Q_init = calc_Qinit(dataloader, device=device)
     print(f"Qinit shape: {Q_init.shape}")
 
-    x = torch.randn(1, 1, 64, 64).to(device)
+    # define model and other parameters
     model = FCN(action_size=6).to(device)
-    policy, value = model(x)
-
-    print(policy.shape)
-    print(value.shape)
+    optimizer = optim.Adam(model.parameters(), lr=args.lr_init)
+    lr_lambda = lambda episode: (1 - episode / args.max_episode) ** 0.9
+    scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda, verbose=True)
