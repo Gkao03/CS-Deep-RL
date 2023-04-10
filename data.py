@@ -35,6 +35,7 @@ class MyCSDataset(Dataset):
         image_x = self.transform(image) if self.transform else image
         flat_y = self.A_transform(image_x)
         flat_x = torch.flatten(image_x, start_dim=1, end_dim=-1).unsqueeze(-1)
+        image.close()
 
         return image_x, flat_x, flat_y
 
