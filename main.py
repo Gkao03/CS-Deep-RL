@@ -20,6 +20,7 @@ if __name__ == '__main__':
     dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
 
     # calc Qinit
+    print("calculating Qinit...")
     Q_init = calc_Qinit(dataloader, device=get_device())
 
     x = torch.randn(1, 1, 64, 64)
