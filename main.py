@@ -12,6 +12,7 @@ if __name__ == '__main__':
     args = Args()
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
+    device = get_device()
 
     # data related stuff
     A = generate_A(args.m, args.n)
@@ -21,10 +22,10 @@ if __name__ == '__main__':
 
     # calc Qinit
     print("calculating Qinit...")
-    Q_init = calc_Qinit(dataloader, device=get_device())
+    Q_init = calc_Qinit(dataloader, device=device)
 
-    x = torch.randn(1, 1, 64, 64)
-    model = FCN(action_size=6)
+    x = torch.randn(1, 1, 64, 64).to(device)
+    model = FCN(action_size=6).to(device)
     policy, value = model(x)
 
     print(policy.shape)
