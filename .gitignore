@@ -5,6 +5,7 @@
 
 # custom
 test_dir/
+data/
 
 # User-specific files
 *.rsuser
