@@ -23,6 +23,7 @@ if __name__ == '__main__':
     # calc Qinit
     print("calculating Qinit...")
     Q_init = calc_Qinit(dataloader, device=device)
+    print(f"Qinit shape: {Q_init.shape}")
 
     x = torch.randn(1, 1, 64, 64).to(device)
     model = FCN(action_size=6).to(device)
