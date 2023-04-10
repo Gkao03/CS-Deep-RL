@@ -11,7 +11,7 @@ from data import *
 if __name__ == '__main__':
     args = Args()
     torch.manual_seed(args.seed)
-    np.seed(args.seed)
+    np.random.seed(args.seed)
 
     # data related stuff
     A = generate_A(args.m, args.n)

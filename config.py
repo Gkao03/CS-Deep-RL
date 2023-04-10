@@ -1,6 +1,6 @@
 class Args:
     def __init__(self):
-        self.seed = 2023
+        self.seed = 40
         self.data_dir = "test_dir/"
         self.tmax = 5
         self.Tmax = 150000
