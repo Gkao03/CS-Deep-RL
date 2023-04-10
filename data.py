@@ -35,7 +35,6 @@ class MyCSDataset(Dataset):
         image_x = self.transform(image) if self.transform else image
         flat_y = self.A_transform(image_x)
         flat_x = torch.flatten(image_x, start_dim=1, end_dim=-1).unsqueeze(-1)
-        image.close()
 
         return image_x, flat_x, flat_y
 
@@ -72,8 +71,8 @@ def calc_Qinit(dataloader, device="cpu"):
     ys = []
 
     for _, flat_x, flat_y in dataloader:
-        xs.append(torch.squeeze(flat_x))
-        ys.append(torch.squeeze(flat_y))
+        xs.append(torch.squeeze(flat_x).clone())
+        ys.append(torch.squeeze(flat_y).clone())
 
     X = torch.stack(xs, dim=1).to(device)
     Y = torch.stack(ys, dim=1).to(device)
