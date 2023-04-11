@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     # define model and other parameters
     actions = ActionSpace().action_space
-    model = FCN(action_size=6).to(device)
+    model = FCN(action_size=len(actions)).to(device)
     reward_conv = RewardConv(args.w_filter_size).to(device)
     optimizer = optim.Adam(model.parameters(), lr=args.lr_init)
     lr_lambda = lambda episode: (1 - episode / args.max_episode) ** 0.9
