@@ -3,7 +3,7 @@ import torch
 import torch.optim as optim
 import numpy as np
 from pfrl.agents import A2C
-from models import FCN
+from models import FCN, RewardConv
 from config import Args, ActionSpace
 from utils import get_device
 from data import *
@@ -30,6 +30,7 @@ if __name__ == '__main__':
     # define model and other parameters
     actions = ActionSpace().action_space
     model = FCN(action_size=6).to(device)
+    reward_conv = RewardConv(args.w_filter_size).to(device)
     optimizer = optim.Adam(model.parameters(), lr=args.lr_init)
     lr_lambda = lambda episode: (1 - episode / args.max_episode) ** 0.9
     scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda, verbose=True)
