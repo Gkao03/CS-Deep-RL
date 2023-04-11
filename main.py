@@ -55,6 +55,11 @@ if __name__ == '__main__':
 
         curr_state = torch.matmul(Q_init, state_y).reshape(-1, 1, args.image_size, args.image_size)
 
+        # saved output
+        policies = []
+        values = []
+        rewards = []
+
         while t - t_start < args.tmax:
             # curr_state
             curr_state = curr_state.to(device)
@@ -73,6 +78,12 @@ if __name__ == '__main__':
             # calculate reward
             reward = torch.square(target_state - curr_state) - torch.square(target_state - next_state)
 
+            # append
+            policies.append(policy)
+            values.append(value)
+            rewards.append(reward)
+
+            # update counters
             t += 1
             T += 1
 
