@@ -28,7 +28,7 @@ if __name__ == '__main__':
     print(f"Qinit shape: {Q_init.shape}")
 
     # define model and other parameters
-    actions = ActionSpace()
+    actions = ActionSpace().action_space
     model = FCN(action_size=6).to(device)
     optimizer = optim.Adam(model.parameters(), lr=args.lr_init)
     lr_lambda = lambda episode: (1 - episode / args.max_episode) ** 0.9
@@ -53,13 +53,23 @@ if __name__ == '__main__':
             data_iterator = iter(dataloader)
             terminal_state, _, state_y = next(data_iterator)
 
-        state_x = torch.matmul(Q_init, state_y).reshape(-1, 1, args.image_size, args.image_size).to(device)
+        curr_state = torch.matmul(Q_init, state_y).reshape(-1, 1, args.image_size, args.image_size)
 
         while t - t_start < args.tmax:
-            policy, value = model(state_x)
+            # curr_state
+            curr_state = curr_state.to(device)
+
+            # feed through network
+            policy, value = model(curr_state)
+
+            # sample and get action
             action_idx = policy.sample()
-            action = action_idx.clone().detach().cpu()
-            action.apply_(lambda x: actions[x])
-            
+            action = action_idx.clone().detach().cpu().float()
+            action.apply_(lambda x: actions[int(x)])
+
+            # get next_state
+            next_state = curr_state.detach().cpu() * action
+
+
             t += 1
             T += 1
