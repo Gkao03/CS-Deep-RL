@@ -57,6 +57,9 @@ if __name__ == '__main__':
 
         while t - t_start < args.tmax:
             policy, value = model(state_x)
-            action = policy.sample()
+            action_idx = policy.sample()
+            action = action_idx.clone().detach().cpu()
+            action.apply_(lambda x: actions[x])
+            
             t += 1
             T += 1
