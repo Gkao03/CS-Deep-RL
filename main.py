@@ -92,7 +92,7 @@ if __name__ == '__main__':
         # get reward map
         R = value.detach()
 
-        for pi, V, r in reversed(zip(policies, values, rewards)):
+        for pi, V, r in zip(reversed(policies), reversed(values), reversed(rewards)):
             R = r + args.gamma * R
             loss_theta_p += pi.log_prob(action_idx) * (R - V)
             loss_theta_v += F.smooth_l1_loss(V, R)
