@@ -48,10 +48,10 @@ if __name__ == '__main__':
 
         # obtain some data
         try:
-            terminal_state, _, state_y = next(data_iterator)
+            target_state, _, state_y = next(data_iterator)
         except StopIteration:
             data_iterator = iter(dataloader)
-            terminal_state, _, state_y = next(data_iterator)
+            target_state, _, state_y = next(data_iterator)
 
         curr_state = torch.matmul(Q_init, state_y).reshape(-1, 1, args.image_size, args.image_size)
 
@@ -70,6 +70,8 @@ if __name__ == '__main__':
             # get next_state
             next_state = curr_state.detach().cpu() * action
 
+            # calculate reward
+            reward = torch.square(target_state - curr_state) - torch.square(target_state - next_state)
 
             t += 1
             T += 1
