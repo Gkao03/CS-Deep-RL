@@ -75,3 +75,6 @@ if __name__ == '__main__':
 
             t += 1
             T += 1
+
+        # get reward map
+        R = value.detach()
