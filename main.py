@@ -95,8 +95,13 @@ if __name__ == '__main__':
         # get reward map
         R = value.detach()  # keep gradient?
 
+        # iterate backwards
         for pi, act_idx, V, r in zip(reversed(policies), reversed(action_idx), reversed(values), reversed(rewards)):
             R = r + args.gamma * R
             loss_theta_p -= torch.mean(torch.mean(pi.log_prob(act_idx) * (R - V), dim=(1, 2)))
             loss_theta_v += F.mse_loss(V, R)
             loss += loss_theta_p + loss_theta_v
+
+        # calc gradients and step with optimizer
+        loss.backward()
+        optimizer.step()
