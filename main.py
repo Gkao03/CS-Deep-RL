@@ -1,5 +1,6 @@
 import pfrl
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import numpy as np
@@ -45,7 +46,7 @@ if __name__ == '__main__':
         optimizer.zero_grad()
         loss_theta_p = 0
         loss_theta_v = 0
-        loss_w = 0
+        loss = 0
         t_start = t
 
         # obtain some data
@@ -59,6 +60,7 @@ if __name__ == '__main__':
 
         # saved output
         policies = []
+        action_idxs = []
         values = []
         rewards = []
 
@@ -82,6 +84,7 @@ if __name__ == '__main__':
 
             # append
             policies.append(policy)
+            action_idxs.append(action_idx)
             values.append(value)
             rewards.append(reward)
 
@@ -90,10 +93,10 @@ if __name__ == '__main__':
             T += 1
 
         # get reward map
-        R = value.detach()
+        R = value.detach()  # keep gradient?
 
-        for pi, V, r in zip(reversed(policies), reversed(values), reversed(rewards)):
+        for pi, act_idx, V, r in zip(reversed(policies), reversed(action_idx), reversed(values), reversed(rewards)):
             R = r + args.gamma * R
-            loss_theta_p += pi.log_prob(action_idx) * (R - V)
-            loss_theta_v += F.smooth_l1_loss(V, R)
-            loss_w += F.smooth_l1_loss(reward_conv(curr_state), R)
+            loss_theta_p -= torch.mean(torch.mean(pi.log_prob(act_idx) * (R - V), dim=(1, 2)))
+            loss_theta_v += F.mse_loss(V, R)
+            loss += loss_theta_p + loss_theta_v
