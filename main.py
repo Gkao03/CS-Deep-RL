@@ -103,7 +103,7 @@ if __name__ == '__main__':
             R = r + R
 
             # update losses
-            loss_theta_p -= torch.mean(torch.mean(pi.log_prob(act_idx) * (R - V), dim=(1, 2)))
+            loss_theta_p += -torch.mean(torch.mean(pi.log_prob(act_idx) * (R - V), dim=(1, 2)))
             loss_theta_v += F.mse_loss(V, R)
             loss += loss_theta_p + loss_theta_v
 
