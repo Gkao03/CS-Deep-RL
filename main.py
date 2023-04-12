@@ -97,7 +97,12 @@ if __name__ == '__main__':
 
         # iterate backwards
         for pi, act_idx, V, r in reversed(list(zip(policies, action_idxs, values, rewards))):
-            R = r + args.gamma * R
+            # reward map
+            R = args.gamma * R
+            R = reward_conv(R)
+            R = r + R
+
+            # update losses
             loss_theta_p -= torch.mean(torch.mean(pi.log_prob(act_idx) * (R - V), dim=(1, 2)))
             loss_theta_v += F.mse_loss(V, R)
             loss += loss_theta_p + loss_theta_v
