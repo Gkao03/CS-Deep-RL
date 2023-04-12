@@ -96,7 +96,7 @@ if __name__ == '__main__':
         R = value.detach()  # keep gradient?
 
         # iterate backwards
-        for pi, act_idx, V, r in zip(reversed(policies), reversed(action_idx), reversed(values), reversed(rewards)):
+        for pi, act_idx, V, r in reversed(list(zip(policies, action_idxs, values, rewards))):
             R = r + args.gamma * R
             loss_theta_p -= torch.mean(torch.mean(pi.log_prob(act_idx) * (R - V), dim=(1, 2)))
             loss_theta_v += F.mse_loss(V, R)
