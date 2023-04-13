@@ -1,3 +1,5 @@
+import os
+
 class Args:
     def __init__(self):
         self.seed = 40
@@ -12,6 +14,8 @@ class Args:
         self.n = self.image_size ** 2
         self.m = int(0.2 * self.n)
         self.batch_size = 1
+        self.exp_num = 1
+        self.out_dir = os.path.join("out", f"exp{self.exp_num}")
 
 
 class ActionSpace:
