@@ -82,7 +82,7 @@ if __name__ == '__main__':
             next_state = curr_state.detach().cpu() * action
 
             # calculate reward
-            reward = torch.square(target_state - curr_state) - torch.square(target_state - next_state)
+            reward = torch.square(target_state - curr_state.cpu()) - torch.square(target_state - next_state)
 
             # append
             policies.append(policy)
