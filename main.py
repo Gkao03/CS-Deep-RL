@@ -40,6 +40,7 @@ if __name__ == '__main__':
     # start
     T = 0
     t = 1
+    print("start training...")
 
     while T <= args.Tmax:
         # initialization

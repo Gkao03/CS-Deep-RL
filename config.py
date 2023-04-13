@@ -3,7 +3,7 @@ import os
 class Args:
     def __init__(self):
         self.seed = 40
-        self.data_dir = "test_dir/"
+        self.data_dir = "data/pristine_images"
         self.tmax = 5
         self.max_episode = 30000
         self.Tmax = self.tmax * self.max_episode
