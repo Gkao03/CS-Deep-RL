@@ -88,9 +88,10 @@ if __name__ == '__main__':
             values.append(value)
             rewards.append(reward)
 
-            # update counters
+            # update counters and curr state
             t += 1
             T += 1
+            curr_state = next_state
 
         # get reward map
         R = value.detach()  # keep gradient?
