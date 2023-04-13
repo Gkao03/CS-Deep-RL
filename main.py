@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+import torchvision.transforms as transforms
 import numpy as np
 from pfrl.agents import A2C
 from models import FCN, RewardConv
@@ -59,6 +60,7 @@ if __name__ == '__main__':
             target_state, _, state_y = next(data_iterator)
 
         curr_state = torch.matmul(Q_init, state_y).reshape(-1, 1, args.image_size, args.image_size)
+        curr_state = transforms.ToTensor()(curr_state)
 
         # saved output
         policies = []
