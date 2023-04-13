@@ -60,7 +60,6 @@ if __name__ == '__main__':
             target_state, _, state_y = next(data_iterator)
 
         curr_state = torch.matmul(Q_init, state_y).reshape(-1, 1, args.image_size, args.image_size)
-        curr_state = transforms.ToTensor()(curr_state)
 
         # saved output
         policies = []
