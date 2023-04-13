@@ -21,6 +21,7 @@ if __name__ == '__main__':
     A = generate_A(args.m, args.n)
     transform = get_transform(args.image_size)
     dataset = MyCSDataset(args.data_dir, A, transform=transform)
+    qinit_dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=2)
     dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
     data_iterator = iter(dataloader)  # use iterator to get data
 
