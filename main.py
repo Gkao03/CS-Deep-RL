@@ -102,6 +102,7 @@ if __name__ == '__main__':
         # iterate backwards
         for pi, act_idx, V, r in reversed(list(zip(policies, action_idxs, values, rewards))):
             # reward map
+            r = r.to(device)
             R = args.gamma * R
             R = reward_conv(R)
             R = r + R
