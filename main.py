@@ -41,6 +41,11 @@ if __name__ == '__main__':
 
     # get min and max
     min_val, max_val = get_min_max_data(Q_init, dataloader)
+    
+    # create output dir
+    if not os.path.exists(args.out_dir):
+        os.makedirs(args.out_dir)
+        print(f"created output dir: {args.out_dir}")
 
     # start
     T = 0
@@ -127,10 +132,6 @@ if __name__ == '__main__':
         # print logging info
         if (T - args.tmax) % args.log_step == 0:
             print(f"T: {T}, loss: {loss.item()}, loss_theta_p: {loss_theta_p.item()}, loss_theta_v: {loss_theta_v.item()}")
-
-    # create output dir
-    if not os.path.exists(args.out_dir):
-        os.makedirs(args.out_dir)
 
     # save models
     torch.save(model.state_dict(), os.path.join(args.out_dir, "model.pth"))
