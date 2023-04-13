@@ -8,7 +8,7 @@ import numpy as np
 from pfrl.agents import A2C
 from models import FCN, RewardConv
 from config import Args, ActionSpace
-from utils import get_device
+from utils import get_device, get_min_max_data, rescale_tensor_01
 from data import *
 
 
@@ -39,6 +39,9 @@ if __name__ == '__main__':
     lr_lambda = lambda episode: (1 - episode / args.max_episode) ** 0.9
     scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda, verbose=True)
 
+    # get min and max
+    min_val, max_val = get_min_max_data(Q_init, dataloader)
+
     # start
     T = 0
     t = 1
@@ -60,6 +63,7 @@ if __name__ == '__main__':
             target_state, _, state_y = next(data_iterator)
 
         curr_state = torch.matmul(Q_init, state_y).reshape(-1, 1, args.image_size, args.image_size)
+        curr_state = rescale_tensor_01(curr_state, min_val, max_val)
 
         # saved output
         policies = []
