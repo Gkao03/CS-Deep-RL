@@ -5,15 +5,15 @@ class Args:
         self.seed = 40
         self.data_dir = "test_dir/"
         self.tmax = 5
-        self.Tmax = 150000
         self.max_episode = 30000
+        self.Tmax = self.tmax * self.max_episode
         self.w_filter_size = 33
         self.lr_init = 1e-3
         self.image_size = 64
         self.gamma = 0.9
         self.n = self.image_size ** 2
         self.m = int(0.2 * self.n)
-        self.batch_size = 1
+        self.batch_size = 64
         self.exp_num = 1
         self.out_dir = os.path.join("out", f"exp{self.exp_num}")
         self.log_step = 100
