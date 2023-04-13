@@ -122,4 +122,6 @@ if __name__ == '__main__':
 
     # save models
     torch.save(model.state_dict(), os.path.join(args.out_dir, "model.pth"))
+    print("saved model")
     torch.save(reward_conv.state_dict(), os.path.join(args.out_dir, "reward_conv.pth"))
+    print("saved reward_conv")
