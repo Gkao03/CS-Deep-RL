@@ -16,6 +16,7 @@ class Args:
         self.batch_size = 1
         self.exp_num = 1
         self.out_dir = os.path.join("out", f"exp{self.exp_num}")
+        self.log_step = 100
 
 
 class ActionSpace:
