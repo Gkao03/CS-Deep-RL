@@ -112,6 +112,10 @@ if __name__ == '__main__':
         loss.backward()
         optimizer.step()
 
+        # print logging info
+        if (T - args.tmax) % args.log_step == 0:
+            print(f"T: {T}, loss: {loss.item()}, loss_theta_p: {loss_theta_p}, loss_theta_v: {loss_theta_v}")
+
     # create output dir
     if not os.path.exists(args.out_dir):
         os.makedirs(args.out_dir)
