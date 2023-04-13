@@ -77,6 +77,7 @@ if __name__ == '__main__':
             action_idx = policy.sample()
             action = action_idx.clone().detach().cpu().float()
             action.apply_(lambda x: actions[int(x)])
+            action = torch.unsqueeze(action, dim=1)
 
             # get next_state
             next_state = curr_state.detach().cpu() * action
