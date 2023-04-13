@@ -121,7 +121,7 @@ if __name__ == '__main__':
 
         # print logging info
         if (T - args.tmax) % args.log_step == 0:
-            print(f"T: {T}, loss: {loss.item()}, loss_theta_p: {loss_theta_p}, loss_theta_v: {loss_theta_v}")
+            print(f"T: {T}, loss: {loss.item()}, loss_theta_p: {loss_theta_p.item()}, loss_theta_v: {loss_theta_v.item()}")
 
     # create output dir
     if not os.path.exists(args.out_dir):
