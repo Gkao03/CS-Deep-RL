@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     # calc Qinit
     print("calculating Qinit...")
-    Q_init = calc_Qinit(dataloader, device=device)
+    Q_init = calc_Qinit(qinit_dataloader, device=device)
     print(f"Qinit shape: {Q_init.shape}")
 
     # define model and other parameters
