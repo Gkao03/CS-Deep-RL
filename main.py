@@ -111,6 +111,9 @@ if __name__ == '__main__':
         # calc gradients and step with optimizer
         loss.backward()
         optimizer.step()
+        
+        # step scheduler
+        scheduler.step()
 
         # print logging info
         if (T - args.tmax) % args.log_step == 0:
