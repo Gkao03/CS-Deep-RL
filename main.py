@@ -19,6 +19,11 @@ if __name__ == '__main__':
     np.random.seed(args.seed)
     device = get_device()
 
+    # create output dir
+    if not os.path.exists(args.out_dir):
+        os.makedirs(args.out_dir)
+        print(f"created output dir: {args.out_dir}")
+
     # data related stuff
     A = generate_A(args.m, args.n)
     transform = get_transform(args.image_size)
@@ -35,6 +40,10 @@ if __name__ == '__main__':
     Q_init = calc_Qinit(qinit_dataloader, device=device)
     print(f"Qinit shape: {Q_init.shape}")
 
+    # save A and Qinit
+    np.save(os.path.join(args.out_dir, "A.npy"), A)
+    np.save(os.path.join(args.out_dir, "Q_init.npy"), Q_init.numpy())
+
     # define model and other parameters
     actions = ActionSpace().action_space
     model = FCN(action_size=len(actions)).to(device)
@@ -45,11 +54,6 @@ if __name__ == '__main__':
 
     # get min and max
     min_val, max_val = get_min_max_data(Q_init, dataloader)
-    
-    # create output dir
-    if not os.path.exists(args.out_dir):
-        os.makedirs(args.out_dir)
-        print(f"created output dir: {args.out_dir}")
 
     # start
     T = 0
