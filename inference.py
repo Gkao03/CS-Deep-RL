@@ -21,9 +21,9 @@ if __name__ == "__main__":
     A = generate_A(args.m, args.n)
     transform = get_transform(args.image_size)
     dataset = MyCSDataset(args.data_dir, A, transform=transform)
-    dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=2)
+    qinit_dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=2)
 
     # calc Qinit
     print("calculating Qinit...")
-    Q_init = calc_Qinit(dataloader, device=device)
+    Q_init = calc_Qinit(qinit_dataloader, device=device)
     print(f"Qinit shape: {Q_init.shape}")
