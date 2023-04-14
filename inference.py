@@ -27,3 +27,6 @@ if __name__ == "__main__":
     print("calculating Qinit...")
     Q_init = calc_Qinit(qinit_dataloader, device=device)
     print(f"Qinit shape: {Q_init.shape}")
+
+    # get min and max
+    min_val, max_val = get_min_max_data(Q_init, qinit_dataloader)
