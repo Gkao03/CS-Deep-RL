@@ -1,3 +1,4 @@
+import time
 import pfrl
 import torch
 import torch.nn as nn
@@ -25,6 +26,9 @@ if __name__ == '__main__':
     qinit_dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=2)
     dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
     data_iterator = iter(dataloader)  # use iterator to get data
+
+    # start timer
+    start_time = time.time()
 
     # calc Qinit
     print("calculating Qinit...")
@@ -132,6 +136,10 @@ if __name__ == '__main__':
         # print logging info
         if T % args.log_step == 0 or T == args.tmax:
             print(f"T: {T}, loss: {loss.item()}, loss_theta_p: {loss_theta_p.item()}, loss_theta_v: {loss_theta_v.item()}")
+
+    # end timer
+    end_time = time.time()
+    print(f"total time: {(end_time - start_time) / 3600} hours")
 
     # save models
     torch.save(model.state_dict(), os.path.join(args.out_dir, "model.pth"))
