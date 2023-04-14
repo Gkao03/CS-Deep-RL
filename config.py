@@ -14,7 +14,7 @@ class Args:
         self.n = self.image_size ** 2
         self.m = int(0.2 * self.n)
         self.batch_size = 64
-        self.exp_num = 2
+        self.exp_num = 3
         self.out_dir = os.path.join("out", f"exp{self.exp_num}")
         self.log_step = 100
 
