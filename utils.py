@@ -1,4 +1,5 @@
 import torch
+import imageio
 
 
 def get_device():
@@ -22,3 +23,12 @@ def get_min_max_data(Qinit, dataloader):
 
 def rescale_tensor_01(tensor, min_val, max_val):
     return (tensor - min_val) / (max_val - min_val)
+
+
+def np_to_image_save(np_array, path):
+    imageio.imwrite(path, np_array)
+
+
+def scale_array_uint8(arr):
+    new_arr = ((arr - arr.min()) * (1 / arr.ptp() * 255)).astype('uint8')
+    return new_arr
