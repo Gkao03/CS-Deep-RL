@@ -52,7 +52,7 @@ if __name__ == '__main__':
     t = 1
     print("start training...")
 
-    while T <= args.Tmax:
+    while T < args.Tmax:
         # initialization
         optimizer.zero_grad()
         loss_theta_p = 0
