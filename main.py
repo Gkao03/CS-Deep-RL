@@ -37,7 +37,7 @@ if __name__ == '__main__':
     reward_conv = RewardConv(args.w_filter_size).to(device)
     optimizer = optim.Adam(model.parameters(), lr=args.lr_init)
     lr_lambda = lambda episode: (1 - episode / args.max_episode) ** 0.9
-    scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda, verbose=True)
+    scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda, verbose=False)
 
     # get min and max
     min_val, max_val = get_min_max_data(Q_init, dataloader)
