@@ -30,3 +30,12 @@ if __name__ == "__main__":
 
     # get min and max
     min_val, max_val = get_min_max_data(Q_init, qinit_dataloader)
+
+    # define models
+    actions = ActionSpace().action_space
+    model = FCN(action_size=len(actions)).to(device)
+    reward_conv = RewardConv(args.w_filter_size).to(device)
+
+    # load state dicts from trained models
+    model.load_state_dict(torch.load(os.path.join(args.out_dir, "model.pth")))
+    reward_conv.load_state_dict(torch.load(os.path.join(args.out_dir, "reward_conv.pth")))
