@@ -41,8 +41,8 @@ if __name__ == '__main__':
     print(f"Qinit shape: {Q_init.shape}")
 
     # save A and Qinit
-    np.save(os.path.join(args.out_dir, "A.npy"), A)
-    np.save(os.path.join(args.out_dir, "Q_init.npy"), Q_init.numpy())
+    np.save(args.A_path, A)
+    np.save(args.Qinit_path, Q_init.numpy())
 
     # define model and other parameters
     actions = ActionSpace().action_space
