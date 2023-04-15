@@ -58,14 +58,14 @@ if __name__ == "__main__":
     device = get_device()
 
     # data related stuff
-    A = generate_A(args.m, args.n)
+    A = np.load(args.A_path)
     transform = get_transform(args.image_size)
     dataset = MyCSDataset(args.data_dir, A, transform=transform)
     qinit_dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=2)
 
     # calc Qinit
-    print("calculating Qinit...")
-    Q_init = calc_Qinit(qinit_dataloader, device=device)
+    print("getting Qinit...")
+    Q_init = torch.tensor(np.load(args.Qinit_path))
     print(f"Qinit shape: {Q_init.shape}")
 
     # get min and max
