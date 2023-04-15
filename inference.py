@@ -7,7 +7,7 @@ import torchvision.transforms as transforms
 import numpy as np
 from models import FCN, RewardConv
 from config import Args, ActionSpace
-from utils import get_device, get_min_max_data, rescale_tensor_01
+from utils import get_device, get_min_max_data, rescale_tensor_01, np_to_image_save, scale_array_uint8
 from data import *
 
 
@@ -40,12 +40,12 @@ def reconstruct(model, reward_conv, Q_init, min_val, max_val, tmax, dataloader, 
 
         # save images
         original = target_state.detach().cpu().numpy().squeeze()
+        original = scale_array_uint8(original)
         reconstructed = curr_state.detach().cpu().numpy().squeeze()
+        reconstructed = scale_array_uint8(reconstructed)
 
-        print(f"original shape: {original.shape}")
-        print(f"reconstructed shape: {reconstructed.shape}")
-        print(f"original min: {original.min()}, max: {original.max()}")
-        print(f"reconstructed min: {reconstructed.min()}, max: {reconstructed.max()}")
+        np_to_image_save(original, os.path.join(out_dir, "original.png"))
+        np_to_image_save(reconstructed, os.path.join(out_dir, "reconstructed.png"))
         break
 
     print("DONE")
