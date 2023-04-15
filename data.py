@@ -5,6 +5,7 @@ import glob
 import torch
 import torchvision
 import torchvision.transforms as transforms
+from scipy.fft import dct
 from torchvision.datasets import ImageFolder
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
@@ -39,12 +40,19 @@ class MyCSDataset(Dataset):
         return image_x, flat_x, flat_y
 
 
-def generate_A(m, n):
+def generate_A(m, n, method="dft"):
     assert m <= n, "m should be less than equal to n"
 
-    dft_mat = linalg.dft(n) / np.sqrt(n)
-    random_select_row = np.random.permutation(n)
-    A = dft_mat[random_select_row[:m], :].real
+    if method == "dft":
+        dft_mat = linalg.dft(n) / np.sqrt(n)
+        random_select_row = np.random.permutation(n)
+        A = dft_mat[random_select_row[:m], :].real
+    elif method == "dct":
+        dct_mat = dct(np.eye(n))
+        random_select_row = np.random.permutation(n)
+        A = dct_mat[random_select_row[:m], :]
+    else:
+        raise ValueError(f"method type {method} not supported")
 
     return A
 

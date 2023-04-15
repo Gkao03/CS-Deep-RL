@@ -17,6 +17,7 @@ class Args:
         self.exp_num = 3
         self.out_dir = os.path.join("out", f"exp{self.exp_num}")
         self.log_step = 100
+        self.transform_method = "dct"
 
 
 class ActionSpace:
