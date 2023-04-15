@@ -1,7 +1,6 @@
 import torch
 import imageio
 from torchvision.utils import save_image
-from skimage.util import random_noise
 
 
 def get_device():

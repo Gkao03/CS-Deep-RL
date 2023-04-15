@@ -9,6 +9,7 @@ from scipy.fft import dct
 from torchvision.datasets import ImageFolder
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
+from skimage.util import random_noise
 
 
 class A_transform:
@@ -90,3 +91,19 @@ def calc_Qinit(dataloader, device="cpu"):
     Qinit = torch.matmul(XYT, YYT_inv)
 
     return Qinit.cpu()
+
+
+class MyNoisyDataset(Dataset):
+    def __init__(self, data_dir, transform=None):
+        self.image_files = [os.path.join(data_dir, f) for f in os.listdir(data_dir)]
+        self.transform = transform
+
+    def __len__(self):
+        return len(self.image_files)
+    
+    def __getitem__(self, idx):
+        image = Image.open(self.image_files[idx])
+        image_x = self.transform(image) if self.transform else image
+        image_noise = torch.tensor(random_noise(image_x.numpy(), mode='gaussian', var=0.05, clip=True))
+
+        return image_x, image_noise
