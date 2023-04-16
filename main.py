@@ -1,4 +1,5 @@
 import time
+import os
 import pfrl
 import torch
 import torch.nn as nn
@@ -11,6 +12,9 @@ from models import FCN, RewardConv
 from config import Args, ActionSpace
 from utils import get_device, get_min_max_data, rescale_tensor_01
 from data import *
+
+# visible devices
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 
 if __name__ == '__main__':
