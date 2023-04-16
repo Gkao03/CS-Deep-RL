@@ -17,7 +17,7 @@ if __name__ == '__main__':
     args = Args()
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
-    device = get_device()
+    device = get_device(args.device_num)
 
     # create output dir
     if not os.path.exists(args.out_dir):

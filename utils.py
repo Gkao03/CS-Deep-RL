@@ -3,8 +3,12 @@ import imageio
 from torchvision.utils import save_image
 
 
-def get_device():
-    return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+def get_device(device_num):
+    if device_num is None:
+        return torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if device_num == -1:
+        return torch.device("cpu")
+    return torch.device(f"cuda:{device_num}" if torch.cuda.is_available() else "cpu")
 
 
 def get_min_max_data(Qinit, dataloader):
