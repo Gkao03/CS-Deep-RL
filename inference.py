@@ -128,6 +128,7 @@ if __name__ == "__main__":
     # load state dicts from trained models
     model.load_state_dict(torch.load(os.path.join(args.out_dir, "model.pth")))
     reward_conv.load_state_dict(torch.load(os.path.join(args.out_dir, "reward_conv.pth")))
+    print("state dicts loaded")
 
     # dataloader
     dataloader = DataLoader(dataset, batch_size=1, shuffle=True, num_workers=2)
