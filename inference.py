@@ -62,6 +62,7 @@ def reconstruct_denoise(model, reward_conv, tmax, dataloader, actions, device, o
 
     # just get 1 image from dataloader
     for target_state, curr_state in dataloader:
+        save_image(curr_state, os.path.join(out_dir, "noisy.png"))
 
         for _ in range(tmax):
             curr_state = curr_state.to(device)
