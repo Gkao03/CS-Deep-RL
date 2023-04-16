@@ -75,11 +75,11 @@ if __name__ == '__main__':
         t_start = t
 
         # obtain some data (CS)
-        try:
-            target_state, _, state_y = next(data_iterator)
-        except StopIteration:
-            data_iterator = iter(dataloader)
-            target_state, _, state_y = next(data_iterator)
+        # try:
+        #     target_state, _, state_y = next(data_iterator)
+        # except StopIteration:
+        #     data_iterator = iter(dataloader)
+        #     target_state, _, state_y = next(data_iterator)
 
         # CS
         # curr_state = torch.matmul(Q_init, state_y).reshape(-1, 1, args.image_size, args.image_size)
