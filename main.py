@@ -24,11 +24,17 @@ if __name__ == '__main__':
         os.makedirs(args.out_dir)
         print(f"created output dir: {args.out_dir}")
 
-    # data related stuff
-    A = generate_A(args.m, args.n)
+    # data related stuff (CS)
+    # A = generate_A(args.m, args.n)
+    # transform = get_transform(args.image_size)
+    # dataset = MyCSDataset(args.data_dir, A, transform=transform)
+    # qinit_dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=2)
+    # dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
+    # data_iterator = iter(dataloader)  # use iterator to get data
+
+    # data related stuff (denoising)
     transform = get_transform(args.image_size)
-    dataset = MyCSDataset(args.data_dir, A, transform=transform)
-    qinit_dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=2)
+    dataset = MyNoisyDataset(args.data_dir, transform=transform)
     dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
     data_iterator = iter(dataloader)  # use iterator to get data
 
@@ -36,13 +42,13 @@ if __name__ == '__main__':
     start_time = time.time()
 
     # calc Qinit
-    print("calculating Qinit...")
-    Q_init = calc_Qinit(qinit_dataloader, device=device)
-    print(f"Qinit shape: {Q_init.shape}")
+    # print("calculating Qinit...")
+    # Q_init = calc_Qinit(qinit_dataloader, device=device)
+    # print(f"Qinit shape: {Q_init.shape}")
 
     # save A and Qinit
-    np.save(args.A_path, A)
-    np.save(args.Qinit_path, Q_init.numpy())
+    # np.save(args.A_path, A)
+    # np.save(args.Qinit_path, Q_init.numpy())
 
     # define model and other parameters
     actions = ActionSpace().action_space
@@ -53,7 +59,7 @@ if __name__ == '__main__':
     scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda, verbose=False)
 
     # get min and max
-    min_val, max_val = get_min_max_data(Q_init, dataloader)
+    # min_val, max_val = get_min_max_data(Q_init, dataloader)
 
     # start
     T = 0
@@ -68,15 +74,23 @@ if __name__ == '__main__':
         loss = 0
         t_start = t
 
-        # obtain some data
+        # obtain some data (CS)
         try:
             target_state, _, state_y = next(data_iterator)
         except StopIteration:
             data_iterator = iter(dataloader)
             target_state, _, state_y = next(data_iterator)
 
-        curr_state = torch.matmul(Q_init, state_y).reshape(-1, 1, args.image_size, args.image_size)
-        curr_state = rescale_tensor_01(curr_state, min_val, max_val)
+        # CS
+        # curr_state = torch.matmul(Q_init, state_y).reshape(-1, 1, args.image_size, args.image_size)
+        # curr_state = rescale_tensor_01(curr_state, min_val, max_val)
+
+        # obtain some data (denoising)
+        try:
+            target_state, curr_state = next(data_iterator)
+        except StopIteration:
+            data_iterator = iter(dataloader)
+            target_state, curr_state = next(data_iterator)
 
         # saved output
         policies = []
