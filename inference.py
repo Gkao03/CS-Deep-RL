@@ -99,7 +99,7 @@ if __name__ == "__main__":
     args = Args()
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
-    device = get_device()
+    device = get_device(args.device_num)
 
     # data related stuff (CS)
     # A = np.load(args.A_path)
