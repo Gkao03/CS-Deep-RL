@@ -164,8 +164,6 @@ if __name__ == '__main__':
             loss_w = -torch.mean(torch.mean(pi.log_prob(act_idx).detach() * (R - V.detach()), dim=(1, 2))) + F.mse_loss(R, V.detach())
             loss_w.backward()
 
-            
-
         # calc gradients and step with optimizer
         # loss.backward()
         optimizer.step()
