@@ -144,12 +144,19 @@ if __name__ == '__main__':
             R = r + R
 
             # update losses
-            loss_theta_p += -torch.mean(torch.mean(pi.log_prob(act_idx) * (R - V), dim=(1, 2)))
-            loss_theta_v += F.mse_loss(R, V)
-            loss += loss_theta_p + loss_theta_v
+            # loss_theta_p += -torch.mean(torch.mean(pi.log_prob(act_idx) * (R - V), dim=(1, 2)))
+            # loss_theta_v += F.mse_loss(R, V)
+            # loss += loss_theta_p + loss_theta_v
+
+            # update losses try grad accumulation
+            loss_theta_p = -torch.mean(torch.mean(pi.log_prob(act_idx) * (R - V), dim=(1, 2)))
+            loss_theta_v = F.mse_loss(R, V)
+            loss = (loss_theta_p + loss_theta_v) / args.tmax  # normalize by num accumulation steps
+            loss.backward()
+            
 
         # calc gradients and step with optimizer
-        loss.backward()
+        # loss.backward()
         optimizer.step()
         
         # step scheduler
