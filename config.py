@@ -14,7 +14,7 @@ class Args:
         self.n = self.image_size ** 2
         self.m = int(0.2 * self.n)
         self.batch_size = 64
-        self.exp_num = 7
+        self.exp_num = 8
         self.out_dir = os.path.join("out", f"exp{self.exp_num}")
         self.log_step = 100
         self.transform_method = "dct"
@@ -26,7 +26,11 @@ class Args:
 class ActionSpace:
     def __init__(self):
         # idx to action (multiply)
-        self.action_space = {0: 0.9,
-                             1: 0.95,
-                             2: 1.05,
-                             3: 1.1,}
+        self.action_space = {0: 0.8,
+                             1: 0.85,
+                             2: 0.9,
+                             3: 0.95,
+                             4: 1.05,
+                             5: 1.1,
+                             6: 1.15,
+                             7: 1.2,}
