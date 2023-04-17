@@ -75,7 +75,7 @@ if __name__ == '__main__':
         optimizer.zero_grad()
         loss_theta_p = 0
         loss_theta_v = 0
-        loss = 0
+        loss_w = 0
         t_start = t
 
         # obtain some data (CS)
@@ -155,17 +155,13 @@ if __name__ == '__main__':
             # loss.backward()
 
             # update losses - grad accumulation for each network individually (exp 8)
-            loss_theta_p = -torch.mean(torch.mean(pi.log_prob(act_idx) * (R.detach() - V.detach()), dim=(1, 2)))
-            loss_theta_p.backward(retain_graph=True)
-
-            loss_theta_v = F.mse_loss(R.detach(), V)
-            loss_theta_v.backward(retain_graph=True)
-
-            loss_w = -torch.mean(torch.mean(pi.log_prob(act_idx).detach() * (R - V.detach()), dim=(1, 2))) + F.mse_loss(R, V.detach())
-            loss_w.backward(retain_graph=True)
+            loss_theta_p += -torch.mean(torch.mean(pi.log_prob(act_idx) * (R.detach() - V.detach()), dim=(1, 2)))
+            loss_theta_v += F.mse_loss(R.detach(), V)
+            loss_w += -torch.mean(torch.mean(pi.log_prob(act_idx).detach() * (R - V.detach()), dim=(1, 2))) + F.mse_loss(R, V.detach())
 
         # calc gradients and step with optimizer
-        # loss.backward()
+        loss = loss_theta_p + loss_theta_v + loss_w
+        loss.backward()
         optimizer.step()
         
         # step scheduler
@@ -173,7 +169,7 @@ if __name__ == '__main__':
 
         # print logging info
         if T % args.log_step == 0 or T == args.tmax:
-            print(f"T: {T}, loss: {loss.item()}, loss_theta_p: {loss_theta_p.item()}, loss_theta_v: {loss_theta_v.item()}")
+            print(f"T: {T}, loss: {loss.item()}, loss_theta_p: {loss_theta_p.item()}, loss_theta_v: {loss_theta_v.item()}, loss_w: {loss_w.item()}")
 
     # end timer
     end_time = time.time()
