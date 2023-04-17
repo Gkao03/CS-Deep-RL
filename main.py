@@ -156,13 +156,13 @@ if __name__ == '__main__':
 
             # update losses - grad accumulation for each network individually (exp 8)
             loss_theta_p = -torch.mean(torch.mean(pi.log_prob(act_idx) * (R.detach() - V.detach()), dim=(1, 2)))
-            loss_theta_p.backward()
+            loss_theta_p.backward(retain_graph=True)
 
             loss_theta_v = F.mse_loss(R.detach(), V)
-            loss_theta_v.backward()
+            loss_theta_v.backward(retain_graph=True)
 
             loss_w = -torch.mean(torch.mean(pi.log_prob(act_idx).detach() * (R - V.detach()), dim=(1, 2))) + F.mse_loss(R, V.detach())
-            loss_w.backward()
+            loss_w.backward(retain_graph=True)
 
         # calc gradients and step with optimizer
         # loss.backward()
