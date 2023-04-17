@@ -133,7 +133,7 @@ if __name__ == '__main__':
             curr_state = next_state
 
         # get reward map
-        R = value.detach()  # keep gradient?
+        R = value  # keep gradient?
 
         # iterate backwards
         for pi, act_idx, V, r in reversed(list(zip(policies, action_idxs, values, rewards))):
