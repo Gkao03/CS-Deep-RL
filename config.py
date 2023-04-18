@@ -28,5 +28,6 @@ class ActionSpace:
         # idx to action (multiply)
         self.action_space = {0: 0.9,
                              1: 0.95,
-                             2: 1.05,
-                             3: 1.1,}
+                             2: 1.0,
+                             3: 1.05,
+                             4: 1.1,}
