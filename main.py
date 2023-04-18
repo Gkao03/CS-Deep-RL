@@ -58,7 +58,10 @@ if __name__ == '__main__':
     actions = ActionSpace().action_space
     model = FCN(action_size=len(actions)).to(device)
     reward_conv = RewardConv(args.w_filter_size).to(device)
-    optimizer = optim.Adam(model.parameters(), lr=args.lr_init)
+    optimizer = optim.Adam([
+        {'params': model.parameters()},
+        {'params': reward_conv.parameters()},
+    ], lr=args.lr_init)
     lr_lambda = lambda episode: (1 - episode / args.max_episode) ** 0.9
     scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda, verbose=False)
 

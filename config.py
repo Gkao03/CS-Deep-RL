@@ -4,8 +4,8 @@ class Args:
     def __init__(self):
         self.seed = 40
         self.data_dir = "data/pristine_images"
-        self.tmax = 10
-        self.max_episode = 15000  # 30000
+        self.tmax = 5
+        self.max_episode = 20000  # 30000
         self.Tmax = self.tmax * self.max_episode
         self.w_filter_size = 33
         self.lr_init = 1e-3
