@@ -74,7 +74,7 @@ class ApplyAction:
 
         # split action idxs
         action_idxs = torch.split(action_idx, 1, dim=0)
-        action_idxs = [idx.squeeze() for idx in action_idxs]  # idx representing actions
+        action_idxs = [idx.squeeze().numpy() for idx in action_idxs]  # idx representing actions
 
         for i, (img, action_idx) in enumerate(zip(imgs, action_idxs)):
             action_map = dict()
@@ -93,7 +93,7 @@ class ApplyAction:
             #         next_state[i, j] = action_map[idx][i, j]
 
             next_state = self.vec_apply(action_idx, x, y, action_map)
-            next_states.append(next_state)
+            next_states.append(torch.tensor(next_state, dtype=torch.float32))
 
         next_state_tensor = torch.stack(next_states, dim=0)
         next_state_tensor = torch.unsqueeze(next_state_tensor, dim=1)
