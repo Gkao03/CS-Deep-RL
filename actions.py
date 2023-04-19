@@ -1,7 +1,6 @@
 import torch
 import numpy as np
 import cv2
-from collections import defaultdict
 
 
 class BoxFilter:
@@ -79,7 +78,7 @@ class ApplyAction:
                     idx = int(action_idx[i, j].item())
 
                     if idx not in action_map:
-                        action_map[idx] = self.actions[idx](img)
+                        action_map[idx] = torch.tensor(self.actions[idx](img), dtype=torch.float32)
 
                     next_state[i, j] = action_map[idx][i, j]
 
