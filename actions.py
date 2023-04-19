@@ -79,19 +79,9 @@ class ApplyAction:
 
         for i, (img, action_idx) in enumerate(zip(imgs, action_idxs)):
             action_map = dict()
-            # next_state = torch.zeros(curr_state.shape[-2:])
 
             for key, fn in self.actions.items():
                 action_map[key] = fn(img)
-
-            # for i in range(action_idx.shape[0]):
-            #     for j in range(action_idx.shape[1]):
-            #         idx = int(action_idx[i, j].item())
-
-            #         if idx not in action_map:
-            #             action_map[idx] = torch.tensor(self.actions[idx](img), dtype=torch.float32)
-
-            #         next_state[i, j] = action_map[idx][i, j]
 
             next_state = self.vec_apply(action_idx, x, y, action_map)
             next_states.append(torch.tensor(next_state, dtype=torch.float32))
