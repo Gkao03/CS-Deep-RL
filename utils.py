@@ -1,5 +1,6 @@
 import torch
 import imageio
+import numpy as np
 from torchvision.utils import save_image
 
 
@@ -34,6 +35,15 @@ def np_to_image_save(np_array, path):
     imageio.imwrite(path, np_array)
 
 
-def scale_array_uint8(arr):
-    new_arr = ((arr - arr.min()) * (1 / arr.ptp() * 255)).astype('uint8')
-    return new_arr
+def scale_array_uint8(arr, min_val=None, max_val=None):
+    if min_val is None or max_val is None:
+        return ((arr - arr.min()) * (1 / arr.ptp()) * 255).astype(np.uint8)
+    
+    return ((arr - min_val) * (1 / (max_val - min_val)) * 255).astype(np.uint8)
+
+
+def scale_array_float32(arr, min_val=None, max_val=None):
+    if min_val is None or max_val is None:
+        return ((arr - arr.min()) * (1 / arr.ptp()) * 255).astype(np.float32)
+    
+    return ((arr - min_val) * (1 / (max_val - min_val)) * 255).astype(np.float32)
