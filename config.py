@@ -40,8 +40,8 @@ class ActionSpace:
                              2: BilateralFilter(5, 0.1, 5.0),
                              3: MedianFilter(5),
                              4: GaussianFilter(5, 1.5),
-                             5: DoNothing(),
+                             5: GaussianFilter(5, 0.5),
                              6: IncrementValue(1.0),
                              7: IncrementValue(-1.0),
-                             8: GaussianFilter(5, 0.5),
+                             8: DoNothing(),
         }
