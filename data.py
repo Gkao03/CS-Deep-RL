@@ -111,6 +111,6 @@ class MyNoisyDataset(Dataset):
     def __getitem__(self, idx):
         image = Image.open(self.image_files[idx])
         image_x = self.transform(image) if self.transform else image
-        image_noise = torch.tensor(random_noise(image_x.numpy() * 255, mode='gaussian', var=25**2, clip=False) / 255).float()
+        image_noise = torch.tensor(random_noise(image_x.numpy(), mode='gaussian', var=25**2 / 255**2, clip=True)).float()
 
         return image_x, image_noise
