@@ -44,7 +44,7 @@ if __name__ == '__main__':
     data_iterator = iter(dataloader)  # use iterator to get data
 
     # start timer
-    start_time = time.time()
+    start_time = time.perf_counter()
 
     # calc Qinit
     # print("calculating Qinit...")
@@ -178,7 +178,7 @@ if __name__ == '__main__':
             print(f"T: {T}, loss: {loss.item()}, loss_theta_p: {loss_theta_p.item()}, loss_theta_v: {loss_theta_v.item()}, loss_w: {loss_w.item()}")
 
     # end timer
-    end_time = time.time()
+    end_time = time.perf_counter()
     print(f"total time: {(end_time - start_time) / 3600} hours")
 
     # save models
