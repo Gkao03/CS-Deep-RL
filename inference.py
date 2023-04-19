@@ -110,7 +110,7 @@ if __name__ == "__main__":
     # qinit_dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=2)
 
     # data related stuff (denoising)
-    transform = get_transform(args.image_size)
+    transform = get_transform(args.image_size, train=False)
     dataset = MyNoisyDataset(args.data_dir, transform=transform)
     dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
 

@@ -38,7 +38,7 @@ if __name__ == '__main__':
     # data_iterator = iter(dataloader)  # use iterator to get data
 
     # data related stuff (denoising)
-    transform = get_transform(args.image_size)
+    transform = get_transform(args.image_size, train=True)
     dataset = MyNoisyDataset(args.data_dir, transform=transform)
     dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
     data_iterator = iter(dataloader)  # use iterator to get data
