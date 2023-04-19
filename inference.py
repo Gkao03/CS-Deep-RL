@@ -9,6 +9,7 @@ from torchvision.utils import save_image
 from models import FCN, RewardConv
 from config import Args, ActionSpace
 from utils import get_device, get_min_max_data, rescale_tensor_01, np_to_image_save, scale_array_uint8
+from actions import ApplyAction
 from data import *
 
 
@@ -54,7 +55,7 @@ def reconstruct_CS(model, reward_conv, Q_init, min_val, max_val, tmax, dataloade
     print("DONE")
 
 
-def reconstruct_denoise(model, reward_conv, tmax, dataloader, actions, device, out_dir):
+def reconstruct_denoise(model, reward_conv, tmax, dataloader, apply_action, device, out_dir):
     model = model.to(device)
     reward_conv = reward_conv.to(device)
     model.eval()
@@ -73,11 +74,12 @@ def reconstruct_denoise(model, reward_conv, tmax, dataloader, actions, device, o
             # sample and get action
             action_idx = policy.sample()
             action = action_idx.clone().detach().cpu().float()
-            action.apply_(lambda x: actions[int(x)])
-            action = torch.unsqueeze(action, dim=1)
+            # action.apply_(lambda x: actions[int(x)])
+            # action = torch.unsqueeze(action, dim=1)
 
             # get next_state
-            next_state = curr_state.detach().cpu() * action
+            # next_state = curr_state.detach().cpu() * action
+            next_state = apply_action(curr_state.detach().cpu(), action)
             curr_state = next_state
 
         # save images
@@ -124,6 +126,7 @@ if __name__ == "__main__":
     actions = ActionSpace().action_space
     model = FCN(action_size=len(actions)).to(device)
     reward_conv = RewardConv(args.w_filter_size).to(device)
+    apply_action = ApplyAction(actions)
 
     # load state dicts from trained models
     model.load_state_dict(torch.load(os.path.join(args.out_dir, "model.pth")))
@@ -135,4 +138,4 @@ if __name__ == "__main__":
 
     # call reconstruction (CS)
     # reconstruct_CS(model, reward_conv, Q_init, min_val, max_val, args.tmax, dataloader, actions, device, args.out_dir)
-    reconstruct_denoise(model, reward_conv, args.tmax, dataloader, actions, device, args.out_dir)
+    reconstruct_denoise(model, reward_conv, args.tmax, dataloader, apply_action, device, args.out_dir)
