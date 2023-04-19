@@ -64,6 +64,7 @@ class ApplyAction:
         self.vec_apply = np.vectorize(vec_apply, excluded=['action_map'])
 
     def __call__(self, curr_state, action_idx):
+        curr_state = curr_state * 255
         next_states = []
         m, n = curr_state.shape[-2:]
         y, x = np.meshgrid(np.arange(m), np.arange(n))
@@ -98,4 +99,4 @@ class ApplyAction:
         next_state_tensor = torch.stack(next_states, dim=0)
         next_state_tensor = torch.unsqueeze(next_state_tensor, dim=1)
 
-        return next_state_tensor
+        return next_state_tensor / 255

@@ -58,15 +58,22 @@ def generate_A(m, n, method="dft"):
     return A
 
 
-def get_transform(image_size):
+def get_transform(image_size, train=True):
+    if train:
+        transform = transforms.Compose([
+            transforms.Grayscale(),
+            # transforms.Resize((int(1.1 * image_size), int(1.1 * image_size))),
+            transforms.RandomCrop(image_size),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+        ])
+        return transform
+    
+    # test time
     transform = transforms.Compose([
         transforms.Grayscale(),
-        transforms.Resize((int(1.1 * image_size), int(1.1 * image_size))),
-        transforms.RandomCrop(image_size),
-        transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
     ])
-
     return transform
 
 
@@ -104,6 +111,6 @@ class MyNoisyDataset(Dataset):
     def __getitem__(self, idx):
         image = Image.open(self.image_files[idx])
         image_x = self.transform(image) if self.transform else image
-        image_noise = torch.tensor(random_noise(image_x.numpy(), mode='gaussian', var=0.01, clip=True)).float()
+        image_noise = torch.tensor(random_noise(image_x.numpy() * 255, mode='gaussian', var=25**2, clip=False) / 255).float()
 
-        return 255 * image_x, 255 * image_noise
+        return image_x, image_noise
