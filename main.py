@@ -12,6 +12,7 @@ from models import FCN, RewardConv
 from config import Args, ActionSpace
 from utils import get_device, get_min_max_data, rescale_tensor_01
 from data import *
+from actions import ApplyAction
 
 # visible devices
 os.environ["CUDA_VISIBLE_DEVICES"] = "2"
@@ -64,6 +65,7 @@ if __name__ == '__main__':
     ], lr=args.lr_init)
     lr_lambda = lambda episode: (1 - episode / args.max_episode) ** 0.9
     scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda, verbose=False)
+    apply_action = ApplyAction(actions)
 
     # get min and max
     # min_val, max_val = get_min_max_data(Q_init, dataloader)
@@ -115,11 +117,12 @@ if __name__ == '__main__':
             # sample and get action
             action_idx = policy.sample()
             action = action_idx.clone().detach().cpu().float()
-            action.apply_(lambda x: actions[int(x)])
-            action = torch.unsqueeze(action, dim=1)
+            # action.apply_(lambda x: actions[int(x)])
+            # action = torch.unsqueeze(action, dim=1)
 
             # get next_state
-            next_state = curr_state.detach().cpu() * action
+            # next_state = curr_state.detach().cpu() * action
+            next_state = apply_action(curr_state.detach().cpu(), action)
 
             # calculate reward
             reward = torch.square(target_state - curr_state.cpu()) - torch.square(target_state - next_state)
