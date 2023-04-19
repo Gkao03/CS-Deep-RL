@@ -65,7 +65,6 @@ def get_transform(image_size):
         transforms.RandomCrop(image_size),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
-        transforms.Normalize(mean=(0,), std=(1 / 255,)),
     ])
 
     return transform
@@ -107,4 +106,4 @@ class MyNoisyDataset(Dataset):
         image_x = self.transform(image) if self.transform else image
         image_noise = torch.tensor(random_noise(image_x.numpy(), mode='gaussian', var=0.01, clip=True)).float()
 
-        return image_x, image_noise
+        return 255 * image_x, 255 * image_noise
