@@ -65,7 +65,7 @@ def get_transform(image_size):
         transforms.RandomCrop(image_size),
         transforms.RandomHorizontalFlip(),
         transforms.ToTensor(),
-        transforms.Normalize(mean=(0,), std=(255,)),
+        transforms.Normalize(mean=(0,), std=(1 / 255,)),
     ])
 
     return transform
