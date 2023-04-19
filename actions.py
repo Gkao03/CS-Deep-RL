@@ -3,6 +3,57 @@ import numpy as np
 import cv2
 
 
+class BoxFilter:
+    def __init__(self, kernel_size):
+        self.kernel_size = kernel_size
+
+    def __call__(self, img):
+        return cv2.boxFilter(img, -1, (self.kernel_size, self.kernel_size))
+    
+
+class BilateralFilter:
+    def __init__(self, kernel_size, sigma_color, sigma_space):
+        self.kernel_size = kernel_size
+        self.sigma_color = sigma_color
+        self.sigma_space = sigma_space
+
+    def __call__(self, img):
+        return cv2.bilateralFilter(img, self.kernel_size, self.sigma_color, self.sigma_space)
+    
+
+class MedianFilter:
+    def __init__(self, kernel_size):
+        self.kernel_size = kernel_size
+
+    def __call__(self, img):
+        return cv2.medianBlur(img, self.kernel_size)
+    
+
+class GaussianFilter:
+    def __init__(self, kernel_size, sigma):
+        self.kernel_size = kernel_size
+        self.sigma = sigma
+
+    def __call__(self, img):
+        return cv2.GaussianBlur(img, (self.kernel_size, self.kernel_size), sigmaX=self.sigma, sigmaY=self.sigma)
+    
+
+class IncrementValue:
+    def __init__(self, value):
+        self.value = value
+
+    def __call__(self, img):
+        return img + self.value
+    
+
+class DoNothing:
+    def __init__(self):
+        pass
+
+    def __call__(self, img):
+        return img
+    
+
 class ApplyAction:
     def __init__(self, actions):
         self.actions = actions

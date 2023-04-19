@@ -1,4 +1,5 @@
 import os
+from actions import *
 
 class Args:
     def __init__(self):
@@ -26,9 +27,21 @@ class Args:
 class ActionSpace:
     def __init__(self):
         # idx to action (multiply)
-        self.action_space = {0: 0.7,
-                             1: 0.8,
-                             2: 0.9,
-                             3: 1.1,
-                             4: 1.2,
-                             5: 1.3}
+        # self.action_space = {0: 0.7,
+        #                      1: 0.8,
+        #                      2: 0.9,
+        #                      3: 1.1,
+        #                      4: 1.2,
+        #                      5: 1.3}
+        
+        # new action space
+        self.action_space = {0: BoxFilter(5),
+                             1: BilateralFilter(5, 1.0, 5.0),
+                             2: BilateralFilter(5, 0.1, 5.0),
+                             3: MedianFilter(5),
+                             4: GaussianFilter(5, 1.5),
+                             5: GaussianFilter(5, 0.5),
+                             6: IncrementValue(1.0),
+                             7: IncrementValue(-1.0),
+                             8: DoNothing(),
+        }
