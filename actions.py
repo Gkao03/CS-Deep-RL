@@ -1,6 +1,7 @@
 import torch
 import numpy as np
 import cv2
+from collections import defaultdict
 
 
 class BoxFilter:
@@ -59,7 +60,7 @@ class ApplyAction:
         self.actions = actions
 
     def __call__(self, curr_state, action_idx):
-        next_states = [torch.zeros(curr_state.shape[-2:]) for _ in range(curr_state.shape[0])]
+        next_states = []
 
         # split curr_state
         imgs = torch.split(curr_state, 1, dim=0)
@@ -67,7 +68,24 @@ class ApplyAction:
 
         # split action idxs
         action_idxs = torch.split(action_idx, 1, dim=0)
+        action_idxs = [idx.squeeze() for idx in action_idxs]  # idx representing actions
 
         for i, (img, action_idx) in enumerate(zip(imgs, action_idxs)):
-            action = self.actions[int(action_idx)]
-            next_states[i] = img * action
+            action_map = dict()
+            next_state = torch.zeros(curr_state.shape[-2:])
+
+            for i in range(action_idx.shape[0]):
+                for j in range(action_idx.shape[1]):
+                    idx = int(action_idx[i, j].item())
+
+                    if idx not in action_map:
+                        action_map[idx] = self.actions[idx](img)
+
+                    next_state[i, j] = action_map[idx][i, j]
+
+            next_states.append(next_state)
+
+        next_state_tensor = torch.stack(next_states, dim=0)
+        next_state_tensor = torch.unsqueeze(next_state_tensor, dim=1)
+
+        return next_state_tensor
