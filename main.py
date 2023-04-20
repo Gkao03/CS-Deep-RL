@@ -137,7 +137,7 @@ if __name__ == '__main__':
             curr_state = next_state
 
         # get reward map
-        R = value  # keep gradient?
+        R = value  # TODO: element should be value 0 where state is terminal
 
         # iterate backwards
         for pi, act_idx, V, r in reversed(list(zip(policies, action_idxs, values, rewards))):
@@ -173,7 +173,8 @@ if __name__ == '__main__':
 
         # print logging info
         if T % args.log_step == 0 or T == args.tmax:
-            print(f"T: {T}, loss: {loss.item()}, loss_theta_p: {loss_theta_p.item()}, loss_theta_v: {loss_theta_v.item()}, loss_w: {loss_w.item()}")
+            print(f"T: {T}, loss: {loss.item():<20}, loss_theta_p: {loss_theta_p.item():<20}, loss_theta_v: {loss_theta_v.item():<20}, loss_w: {loss_w.item():<20}")
+            # TODO: also log actions chosen count (bin count)
 
     # end timer
     end_time = time.perf_counter()
