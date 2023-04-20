@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from convgru import ConvGRU
+import residual_cnn.model
 
 
 class SharedNet(nn.Module):
@@ -103,3 +104,44 @@ class RewardConv(nn.Module):
     def forward(self, R):
         out = self.reward_conv(R)
         return out
+
+
+# intialize FCN in place with trained residual_cnn
+# copy weights except for GRU and the last layers of the policy and value network
+def initialize_FCN(fcn, dncnn_path='residual_cnn/weights/mydenoiser_041923182445_nobn.pth'):
+    dncnn = residual_cnn.model.ResidualCNN_noBN()
+    dncnn.load_state_dict(torch.load(dncnn_path, map_location=torch.device('cpu')))
+
+    shared_net_param = dict(fcn.shared_net.named_children())
+    policy_net_param = dict(fcn.policy_net.named_children())
+    value_net_param = dict(fcn.value_net.named_children())
+    dncnn_param = dict(dncnn.named_children())
+
+    # initliaze shared net
+    shared_net_param['conv1'].weight.data.copy_(dncnn_param['conv1'].weight.data)
+    shared_net_param['conv1'].bias.data.copy_(dncnn_param['conv1'].bias.data)
+
+    shared_net_param['conv2'].weight.data.copy_(dncnn_param['conv2'].weight.data)
+    shared_net_param['conv2'].bias.data.copy_(dncnn_param['conv2'].bias.data)
+
+    shared_net_param['conv3'].weight.data.copy_(dncnn_param['conv3'].weight.data)
+    shared_net_param['conv3'].bias.data.copy_(dncnn_param['conv3'].bias.data)
+
+    shared_net_param['conv4'].weight.data.copy_(dncnn_param['conv4'].weight.data)
+    shared_net_param['conv4'].bias.data.copy_(dncnn_param['conv4'].bias.data)
+
+    # intialize policy net
+    policy_net_param['conv1'].weight.data.copy_(dncnn_param['conv5'].weight.data)
+    policy_net_param['conv1'].bias.data.copy_(dncnn_param['conv5'].bias.data)
+
+    policy_net_param['conv2'].weight.data.copy_(dncnn_param['conv6'].weight.data)
+    policy_net_param['conv2'].bias.data.copy_(dncnn_param['conv6'].bias.data)
+
+    # intialize value net
+    value_net_param['conv1'].weight.data.copy_(dncnn_param['conv5'].weight.data)
+    value_net_param['conv1'].bias.data.copy_(dncnn_param['conv5'].bias.data)
+
+    value_net_param['conv2'].weight.data.copy_(dncnn_param['conv6'].weight.data)
+    value_net_param['conv2'].bias.data.copy_(dncnn_param['conv6'].bias.data)
+
+    return
