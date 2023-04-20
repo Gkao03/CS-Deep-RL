@@ -1,13 +1,11 @@
 import time
 import os
-import pfrl
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import torchvision.transforms as transforms
 import numpy as np
-from pfrl.agents import A2C
 from models import FCN, RewardConv
 from config import Args, ActionSpace
 from utils import get_device, get_min_max_data, rescale_tensor_01
