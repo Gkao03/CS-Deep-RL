@@ -67,7 +67,7 @@ class ApplyAction:
         curr_state = curr_state * 255
         next_states = []
         m, n = curr_state.shape[-2:]
-        y, x = np.meshgrid(np.arange(m), np.arange(n))
+        y, x = np.meshgrid(np.arange(n), np.arange(m))
 
         # split curr_state
         imgs = torch.split(curr_state, 1, dim=0)
