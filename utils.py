@@ -27,8 +27,8 @@ def get_min_max_data(Qinit, dataloader):
     return min_val, max_val
 
 
-def rescale_tensor_01(tensor, min_val, max_val):
-    return (tensor - min_val) / (max_val - min_val)
+def rescale_tensor_01(tensor):
+    return (tensor - tensor.min()) / (tensor.max() - tensor.min())
 
 
 def np_to_image_save(np_array, path):
