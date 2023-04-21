@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import torchvision.transforms as transforms
+from torchvision.utils import save_image
 import numpy as np
 from models import FCN, RewardConv
 from config import Args, ActionSpace
@@ -173,10 +174,17 @@ if __name__ == '__main__':
         # print logging info
         if T % args.log_step == 0 or T == args.tmax:
             print(f"T: {T}, loss: {loss.item():<20}, loss_theta_p: {loss_theta_p.item():<20}, loss_theta_v: {loss_theta_v.item():<20}, loss_w: {loss_w.item():<20}")
-            
+
             bin_counts = torch.bincount(act_idx.detach().cpu().flatten(), minlength=len(actions)).numpy().tolist()
             str_list = [f"{actions[i]}: {bin_counts[i]}" for i in range(len(actions))]
             print(str_list.join(", "))
+
+        # save image every args.save_img_step
+        if T % args.save_img_step == 0 or T == args.tmax:
+            original = target_state.detach().squeeze()
+            reconstructed = curr_state.detach().squeeze()
+            save_image(original, os.path.join(args.out_dir, f"{T}_target.png"))
+            save_image(reconstructed, os.path.join(args.out_dir, f"{T}_recon.png"))
 
     # end timer
     end_time = time.perf_counter()

@@ -18,6 +18,7 @@ class Args:
         self.exp_num = 13
         self.out_dir = os.path.join("out", f"exp{self.exp_num}")
         self.log_step = 100
+        self.save_img_step = 5000
         self.transform_method = "dct"
         self.A_path = os.path.join(self.out_dir, "A.npy")
         self.Qinit_path = os.path.join(self.out_dir, "Q_init.npy")
