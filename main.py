@@ -186,8 +186,8 @@ if __name__ == '__main__':
 
         # save image every args.save_img_step
         if T % args.save_img_step == 0 or T == args.tmax:
-            original = target_state.detach().squeeze()
-            reconstructed = curr_state.detach().squeeze()
+            original = target_state.detach().squeeze()[0, :, :]
+            reconstructed = curr_state.detach().squeeze()[0, :, :]
             save_image(original, os.path.join(args.out_dir, f"{T}_target.png"))
             save_image(reconstructed, os.path.join(args.out_dir, f"{T}_recon.png"))
 
