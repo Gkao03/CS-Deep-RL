@@ -33,7 +33,7 @@ class MyCSDataset(Dataset):
     def __len__(self):
         return len(self.image_files)
     
-    def __getitem__(self, idx):
+    def __getitem__(self, idx):  # TODO: check flatten in dataset?
         image = Image.open(self.image_files[idx])
         image_x = self.transform(image) if self.transform else image
         flat_y = self.A_transform(image_x)
@@ -56,7 +56,7 @@ def generate_A(m, n, method="dft"):
     else:
         raise ValueError(f"method type {method} not supported")
 
-    A = normalize(A, axis=1, norm="l1")
+    A = A / np.linalg.norm(A, axis=1)[:, np.newaxis]
     return A
 
 
