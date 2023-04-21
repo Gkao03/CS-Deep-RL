@@ -178,7 +178,7 @@ if __name__ == '__main__':
 
         # print logging info
         if T % args.log_step == 0 or T == args.tmax:
-            print(f"T: {T}, loss: {loss.item():<20}, loss_theta_p: {loss_theta_p.item():<20}, loss_theta_v: {loss_theta_v.item():<20}, loss_w: {loss_w.item():<20}")
+            print(f"T: {T}, loss: {loss.item()}, loss_theta_p: {loss_theta_p.item()}, loss_theta_v: {loss_theta_v.item()}, loss_w: {loss_w.item()}")
 
             bin_counts = torch.bincount(act_idx.detach().cpu().flatten(), minlength=len(actions)).numpy().tolist()
             str_list = [f"{actions[i]}: {bin_counts[i]}" for i in range(len(actions))]
