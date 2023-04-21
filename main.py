@@ -183,6 +183,7 @@ if __name__ == '__main__':
             bin_counts = torch.bincount(act_idx.detach().cpu().flatten(), minlength=len(actions)).numpy().tolist()
             str_list = [f"{actions[i]}: {bin_counts[i]}" for i in range(len(actions))]
             print(", ".join(str_list))
+            print()
 
         # save image every args.save_img_step
         if T % args.save_img_step == 0 or T == args.tmax:
