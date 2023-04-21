@@ -137,7 +137,12 @@ if __name__ == '__main__':
             curr_state = next_state
 
         # get reward map
-        R = value  # TODO: element should be value 0 where state is terminal
+        value_uint8 = torch.tensor(255 * value.detach().clone(), dtype=torch.uint8)
+        target_uint8 = torch.tensor(255 * target_state.detach().clone(), dtype=torch.uint8)
+        mask = value_uint8 == target_uint8  # True at equal elements
+
+        R = value
+        R[mask] = torch.zeros_like(R)[mask]
 
         # iterate backwards
         for pi, act_idx, V, r in reversed(list(zip(policies, action_idxs, values, rewards))):
