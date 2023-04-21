@@ -124,6 +124,11 @@ if __name__ == '__main__':
 
             # calculate reward
             reward = torch.square(target_state - curr_state.cpu()) - torch.square(target_state - next_state)
+            mean_reward = torch.mean(reward)
+
+            # append to file
+            with open(os.path.join(args.out_dir, "rewards.txt"), "a") as f:
+                print(f"{mean_reward.item()}", file=f)
 
             # append
             policies.append(policy)
