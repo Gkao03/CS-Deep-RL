@@ -148,8 +148,8 @@ if __name__ == '__main__':
             curr_state = next_state
 
         # get reward map
-        value_uint8 = torch.tensor(255 * value.detach().clone().cpu(), dtype=torch.uint8)
-        target_uint8 = torch.tensor(255 * target_state.detach().clone().cpu(), dtype=torch.uint8)
+        value_uint8 = torch.tensor(255 * value.clone().detach().cpu(), dtype=torch.uint8)
+        target_uint8 = torch.tensor(255 * target_state.clone().detach().cpu(), dtype=torch.uint8)
         mask = value_uint8 == target_uint8  # True at equal elements
 
         R = value
@@ -182,7 +182,7 @@ if __name__ == '__main__':
 
             bin_counts = torch.bincount(act_idx.detach().cpu().flatten(), minlength=len(actions)).numpy().tolist()
             str_list = [f"{actions[i]}: {bin_counts[i]}" for i in range(len(actions))]
-            print(str_list.join(", "))
+            print(", ".join(str_list))
 
         # save image every args.save_img_step
         if T % args.save_img_step == 0 or T == args.tmax:
