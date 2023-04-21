@@ -11,7 +11,7 @@ class BoxFilter:
         return cv2.boxFilter(img, -1, (self.kernel_size, self.kernel_size))
     
     def __repr__(self):
-        return f"BoxFilter({self.kernel_size})"
+        return f"Box({self.kernel_size})"
     
 
 class BilateralFilter:
@@ -24,7 +24,7 @@ class BilateralFilter:
         return cv2.bilateralFilter(img, self.kernel_size, self.sigma_color, self.sigma_space)
     
     def __repr__(self):
-        return f"BilateralFilter({self.kernel_size}, {self.sigma_color}, {self.sigma_space})"
+        return f"Bilat({self.kernel_size}, {self.sigma_color}, {self.sigma_space})"
     
 
 class MedianFilter:
@@ -35,7 +35,7 @@ class MedianFilter:
         return cv2.medianBlur(img, self.kernel_size)
     
     def __repr__(self):
-        return f"MedianFilter({self.kernel_size})"
+        return f"Median({self.kernel_size})"
     
 
 class GaussianFilter:
@@ -47,7 +47,7 @@ class GaussianFilter:
         return cv2.GaussianBlur(img, (self.kernel_size, self.kernel_size), sigmaX=self.sigma, sigmaY=self.sigma)
     
     def __repr__(self):
-        return f"GaussianFilter({self.kernel_size}, {self.sigma})"
+        return f"Gauss({self.kernel_size}, {self.sigma})"
     
 
 class IncrementValue:
@@ -58,7 +58,7 @@ class IncrementValue:
         return img + self.value
     
     def __repr__(self):
-        return f"IncrementValue({self.value})"
+        return f"Inc({self.value})"
     
 
 class DoNothing:
