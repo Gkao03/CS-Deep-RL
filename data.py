@@ -10,6 +10,7 @@ from torchvision.datasets import ImageFolder
 from torch.utils.data import Dataset, DataLoader
 from PIL import Image
 from skimage.util import random_noise
+from sklearn.preprocessing import normalize
 
 
 class A_transform:
@@ -55,6 +56,7 @@ def generate_A(m, n, method="dft"):
     else:
         raise ValueError(f"method type {method} not supported")
 
+    A = normalize(A, axis=1, norm="l1")
     return A
 
 
