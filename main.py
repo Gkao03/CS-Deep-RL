@@ -69,6 +69,7 @@ if __name__ == '__main__':
     # initialize weights of FCN
     initialize_FCN(model)
     model = model.to(device)
+    print("model weights initialized...")
 
     # get min and max
     # min_val, max_val = get_min_max_data(Q_init, dataloader)
@@ -147,8 +148,8 @@ if __name__ == '__main__':
             curr_state = next_state
 
         # get reward map
-        value_uint8 = torch.tensor(255 * value.detach().clone(), dtype=torch.uint8)
-        target_uint8 = torch.tensor(255 * target_state.detach().clone(), dtype=torch.uint8)
+        value_uint8 = torch.tensor(255 * value.detach().clone().cpu(), dtype=torch.uint8)
+        target_uint8 = torch.tensor(255 * target_state.detach().clone().cpu(), dtype=torch.uint8)
         mask = value_uint8 == target_uint8  # True at equal elements
 
         R = value
