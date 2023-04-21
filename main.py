@@ -7,7 +7,7 @@ import torch.optim as optim
 import torchvision.transforms as transforms
 from torchvision.utils import save_image
 import numpy as np
-from models import FCN, RewardConv
+from models import FCN, RewardConv, initialize_FCN
 from config import Args, ActionSpace
 from utils import get_device, get_min_max_data, rescale_tensor_01
 from data import *
@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
     # define model and other parameters
     actions = ActionSpace().action_space
-    model = FCN(action_size=len(actions)).to(device)
+    model = FCN(action_size=len(actions))
     reward_conv = RewardConv(args.w_filter_size).to(device)
     optimizer = optim.Adam([
         {'params': model.parameters()},
@@ -65,6 +65,10 @@ if __name__ == '__main__':
     lr_lambda = lambda episode: (1 - episode / args.max_episode) ** 0.9
     scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lr_lambda, verbose=False)
     apply_action = ApplyAction(actions)
+
+    # initialize weights of FCN
+    initialize_FCN(model)
+    model = model.to(device)
 
     # get min and max
     # min_val, max_val = get_min_max_data(Q_init, dataloader)
