@@ -148,8 +148,8 @@ if __name__ == '__main__':
             curr_state = next_state
 
         # get reward map
-        value_uint8 = torch.tensor(255 * value.clone().detach().cpu(), dtype=torch.uint8)
-        target_uint8 = torch.tensor(255 * target_state.clone().detach().cpu(), dtype=torch.uint8)
+        value_uint8 = (255 * value.detach().clone().cpu()).type(torch.uint8)
+        target_uint8 = (255 * target_state.detach().clone().cpu()).type(torch.uint8)
         mask = value_uint8 == target_uint8  # True at equal elements
 
         R = value
