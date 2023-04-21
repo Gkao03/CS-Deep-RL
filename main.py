@@ -152,18 +152,7 @@ if __name__ == '__main__':
             R = reward_conv(R)
             R = r + R
 
-            # update losses
-            # loss_theta_p += -torch.mean(torch.mean(pi.log_prob(act_idx) * (R - V), dim=(1, 2)))
-            # loss_theta_v += F.mse_loss(R, V)
-            # loss += loss_theta_p + loss_theta_v
-
-            # update losses try grad accumulation
-            # loss_theta_p = -torch.mean(torch.mean(pi.log_prob(act_idx) * (R - V), dim=(1, 2)))
-            # loss_theta_v = F.mse_loss(R, V)
-            # loss = (loss_theta_p + loss_theta_v) / args.tmax  # normalize by num accumulation steps
-            # loss.backward()
-
-            # update losses - grad accumulation for each network individually (exp 8)
+            # update losses - grad accumulation for each network individually
             loss_theta_p += -torch.mean(pi.log_prob(act_idx) * (R.detach().squeeze() - V.detach().squeeze()))
             loss_theta_v += F.mse_loss(R.detach(), V)
             loss_w += -torch.mean(pi.log_prob(act_idx).detach() * (R.squeeze() - V.detach().squeeze())) + F.mse_loss(R, V.detach())
@@ -180,6 +169,9 @@ if __name__ == '__main__':
         if T % args.log_step == 0 or T == args.tmax:
             print(f"T: {T}, loss: {loss.item():<20}, loss_theta_p: {loss_theta_p.item():<20}, loss_theta_v: {loss_theta_v.item():<20}, loss_w: {loss_w.item():<20}")
             # TODO: also log actions chosen count (bin count)
+            bin_counts = torch.bincount(act_idx.detach().cpu().flatten(), minlength=len(actions)).numpy().tolist()
+            str_list = [f"{actions[i]}: {bin_counts[i]}" for i in range(len(actions))]
+            print(str_list.join(", "))
 
     # end timer
     end_time = time.perf_counter()
