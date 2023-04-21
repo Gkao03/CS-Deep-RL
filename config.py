@@ -5,8 +5,8 @@ class Args:
     def __init__(self):
         self.seed = 40
         self.data_dir = "data/pristine_images"
-        self.tmax = 5
-        self.max_episode = 20000  # 30000
+        self.tmax = 10
+        self.max_episode = 15000  # 30000
         self.Tmax = self.tmax * self.max_episode
         self.w_filter_size = 33
         self.lr_init = 1e-3
@@ -15,7 +15,7 @@ class Args:
         self.n = self.image_size ** 2
         self.m = int(0.2 * self.n)
         self.batch_size = 64
-        self.exp_num = 13
+        self.exp_num = 14
         self.out_dir = os.path.join("out", f"exp{self.exp_num}")
         self.log_step = 100
         self.save_img_step = 5000
