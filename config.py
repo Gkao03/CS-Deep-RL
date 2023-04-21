@@ -20,8 +20,6 @@ class Args:
         self.log_step = 100
         self.save_img_step = 5000
         self.transform_method = "dct"
-        self.A_path = os.path.join(self.out_dir, "A.npy")
-        self.Qinit_path = os.path.join(self.out_dir, "Q_init.npy")
         self.device_num = None
 
 
