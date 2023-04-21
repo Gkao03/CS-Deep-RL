@@ -56,7 +56,7 @@ def generate_A(m, n, method="dft"):
     else:
         raise ValueError(f"method type {method} not supported")
 
-    A = A / np.linalg.norm(A, axis=1)[:, np.newaxis]
+    A = normalize(A, axis=1)
     return A
 
 
