@@ -243,8 +243,6 @@ def run_CS(args, device):
 
             # take gradient step?
             gradient = A.t() @ (A @ curr_state.reshape(-1, 1, args.n, 1) - state_y)
-            print(f"gradient shape: {gradient.shape}")
-            print(f"min max gradient: {torch.min(gradient)}, {torch.max(gradient)}")
             curr_state = curr_state - args.eta * gradient.reshape(-1, 1, args.image_size, args.image_size)
 
             # feed through network
