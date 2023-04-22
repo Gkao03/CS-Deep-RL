@@ -184,7 +184,7 @@ def run_CS(args, device):
     np.save(os.path.join(args.out_dir, "Qinit.npy"), Q_init.numpy())
 
     # cast A to tensor
-    A = torch.tensor(A).to(device)
+    A = torch.tensor(A, dtype=torch.float32).to(device)
 
     # define model and other parameters
     actions = ActionSpace().action_space
