@@ -15,10 +15,10 @@ class Args:
         self.n = self.image_size ** 2
         self.m = int(0.2 * self.n)
         self.batch_size = 64
-        self.exp_num = 14
+        self.exp_num = 15
         self.out_dir = os.path.join("out", f"exp{self.exp_num}")
         self.log_step = 100
-        self.save_img_step = 5000
+        self.save_img_step = 10000
         self.transform_method = "dct"
         self.device_num = None
 
