@@ -95,7 +95,9 @@ def calc_Qinit(dataloader, device="cpu"):
     X = torch.stack(xs, dim=1).to(device)
     Y = torch.stack(ys, dim=1).to(device)
 
-    YYT_inv = torch.inverse(torch.matmul(Y, Y.t()))
+    YYT = torch.matmul(Y, Y.t())
+    YYT_reg = YYT + torch.full_like(YYT, 0.1)
+    YYT_inv = torch.inverse(YYT_reg)
     XYT = torch.matmul(X, Y.t())
     Qinit = torch.matmul(XYT, YYT_inv)
 
