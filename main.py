@@ -175,7 +175,6 @@ def run_CS(args, device):
     # calc Qinit
     print("calculating Qinit...")
     Q_init = calc_Qinit(qinit_dataloader, device=device)
-    Q_init = torch.tensor(normalize(Q_init.numpy(), dim=1, norm="l1"))
     print(f"Qinit shape: {Q_init.shape}")
 
     # save A and Qinit
