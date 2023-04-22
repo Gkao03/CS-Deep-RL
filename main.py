@@ -176,6 +176,8 @@ def run_CS(args, device):
     print("calculating Qinit...")
     Q_init = calc_Qinit(qinit_dataloader, device=device)
     print(f"Qinit shape: {Q_init.shape}")
+    print(f"Qinit min: {torch.min(Q_init)}")
+    print(f"Qinit max: {torch.max(Q_init)}")
 
     # save A and Qinit
     np.save(os.path.join(args.out_dir, "A.npy"), A)
