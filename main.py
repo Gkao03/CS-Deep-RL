@@ -183,6 +183,9 @@ def run_CS(args, device):
     np.save(os.path.join(args.out_dir, "A.npy"), A)
     np.save(os.path.join(args.out_dir, "Qinit.npy"), Q_init.numpy())
 
+    # cast A to tensor
+    A = torch.tensor(A).to(device)
+
     # define model and other parameters
     actions = ActionSpace().action_space
     model = FCN(action_size=len(actions))
@@ -236,6 +239,13 @@ def run_CS(args, device):
         while t - t_start < args.tmax:
             # curr_state
             curr_state = curr_state.to(device)
+            state_y = state_y.to(device)
+
+            # take gradient step?
+            gradient = A.t() @ (A @ curr_state.reshape(-1, 1, args.n, 1) - state_y)
+            print(f"gradient shape: {gradient.shape}")
+            print(f"min max gradient: {torch.min(gradient)}, {torch.max(gradient)}")
+            curr_state = curr_state - args.eta * gradient.reshape(-1, 1, args.image_size, args.image_size)
 
             # feed through network
             policy, value = model(curr_state)
@@ -308,7 +318,6 @@ def run_CS(args, device):
         if T % args.save_img_step == 0 or T == args.tmax:
             original = target_state.detach().squeeze()[0, :, :]
             reconstructed = rescale_tensor_01(curr_state.detach().squeeze()[0, :, :])
-            print(f"recon shape: {reconstructed.shape} min max {reconstructed.min()} {reconstructed.max()}")
             save_image(original, os.path.join(args.out_dir, f"{T}_target.png"))
             save_image(reconstructed, os.path.join(args.out_dir, f"{T}_recon.png"))
 

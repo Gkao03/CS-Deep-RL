@@ -14,6 +14,7 @@ class Args:
         self.gamma = 0.9
         self.n = self.image_size ** 2
         self.m = int(0.2 * self.n)
+        self.eta = 0.01
         self.batch_size = 64
         self.exp_num = 15
         self.out_dir = os.path.join("out", f"exp{self.exp_num}")
