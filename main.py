@@ -145,7 +145,8 @@ def run_denoise(args, device):
         # save image every args.save_img_step
         if T % args.save_img_step == 0 or T == args.tmax:
             original = target_state.detach().squeeze()[0, :, :]
-            reconstructed = curr_state.detach().squeeze()[0, :, :]
+            reconstructed = rescale_tensor_01(curr_state.detach().squeeze()[0, :, :])
+            print(f"recon shape: {reconstructed.shape} min max {reconstructed.min()} {reconstructed.max()}")
             save_image(original, os.path.join(args.out_dir, f"{T}_target.png"))
             save_image(reconstructed, os.path.join(args.out_dir, f"{T}_recon.png"))
 
