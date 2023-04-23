@@ -33,7 +33,7 @@ class MyCSDataset(Dataset):
     def __len__(self):
         return len(self.image_files)
     
-    def __getitem__(self, idx):  # TODO: check flatten in dataset?
+    def __getitem__(self, idx):
         image = Image.open(self.image_files[idx])
         image_x = self.transform(image) if self.transform else image  # (1, 64, 64) grayscale
         flat_y = self.A_transform(image_x)

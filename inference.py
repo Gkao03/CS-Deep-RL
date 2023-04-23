@@ -118,7 +118,7 @@ if __name__ == "__main__":
     A = np.load(os.path.join(args.out_dir, "A.npy"))
 
     # data related stuff (denoising)
-    transform = get_transform(args.image_size, train=False)
+    transform = get_transform(args.image_size, train=True)  # train False for denoise/ train True for CS
     # dataset = MyNoisyDataset(args.data_dir, transform=transform)  # denoise
     dataset = MyCSDataset(args.data_dir, A, transform=transform)
     dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
