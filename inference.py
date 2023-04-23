@@ -14,7 +14,7 @@ from data import *
 
 
 def reconstruct_CS(model, reward_conv, A, Q_init, tmax, dataloader, apply_action, device, out_dir):
-    A = torch.tensor(A, dtype=torch.float32)
+    A = torch.tensor(A, dtype=torch.float32).to(device)
     model = model.to(device)
     reward_conv = reward_conv.to(device)
     model.eval()
