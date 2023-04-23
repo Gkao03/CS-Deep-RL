@@ -14,6 +14,7 @@ from data import *
 
 
 def reconstruct_CS(model, reward_conv, A, Q_init, tmax, dataloader, apply_action, device, out_dir):
+    A = torch.tensor(A, dtype=torch.float32)
     model = model.to(device)
     reward_conv = reward_conv.to(device)
     model.eval()
@@ -112,14 +113,15 @@ if __name__ == "__main__":
     # dataset = MyCSDataset(args.data_dir, A, transform=transform)
     # qinit_dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=2)
 
-    # data related stuff (denoising)
-    transform = get_transform(args.image_size, train=False)
-    dataset = MyNoisyDataset(args.data_dir, transform=transform)
-    dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
-
     # get A (CS)
     print("getting A...")
-    A = torch.tensor(np.load(os.path.join(args.out_dir, "A.npy")))
+    A = np.load(os.path.join(args.out_dir, "A.npy"))
+
+    # data related stuff (denoising)
+    transform = get_transform(args.image_size, train=False)
+    # dataset = MyNoisyDataset(args.data_dir, transform=transform)  # denoise
+    dataset = MyCSDataset(args.data_dir, A, transform=transform)
+    dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
 
     # calc Qinit (CS)
     print("getting Qinit...")
