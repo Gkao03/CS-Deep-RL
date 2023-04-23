@@ -13,7 +13,7 @@ from actions import ApplyAction
 from data import *
 
 
-def reconstruct_CS(model, reward_conv, Q_init, min_val, max_val, tmax, dataloader, actions, device, out_dir):
+def reconstruct_CS(model, reward_conv, A, Q_init, tmax, dataloader, apply_action, device, out_dir):
     model = model.to(device)
     reward_conv = reward_conv.to(device)
     model.eval()
@@ -22,10 +22,13 @@ def reconstruct_CS(model, reward_conv, Q_init, min_val, max_val, tmax, dataloade
     # just get 1 image from dataloader
     for target_state, _, state_y in dataloader:
         curr_state = torch.matmul(Q_init, state_y).reshape(-1, 1, args.image_size, args.image_size)
-        curr_state = rescale_tensor_01(curr_state, min_val, max_val)
 
         for _ in range(tmax):
             curr_state = curr_state.to(device)
+
+            # gradient step
+            gradient = A.t() @ (A @ curr_state.reshape(-1, 1, args.n, 1) - state_y)
+            curr_state = curr_state - args.eta * gradient.reshape(-1, 1, args.image_size, args.image_size)
 
             # feed through network
             policy, _ = model(curr_state)
@@ -33,11 +36,11 @@ def reconstruct_CS(model, reward_conv, Q_init, min_val, max_val, tmax, dataloade
             # sample and get action
             action_idx = policy.sample()
             action = action_idx.clone().detach().cpu().float()
-            action.apply_(lambda x: actions[int(x)])
-            action = torch.unsqueeze(action, dim=1)
+            # action.apply_(lambda x: actions[int(x)])
+            # action = torch.unsqueeze(action, dim=1)
 
             # get next_state
-            next_state = curr_state.detach().cpu() * action
+            next_state = apply_action(curr_state.detach().cpu(), action)
             curr_state = next_state
 
         # save images
@@ -114,10 +117,14 @@ if __name__ == "__main__":
     dataset = MyNoisyDataset(args.data_dir, transform=transform)
     dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
 
-    # calc Qinit
-    # print("getting Qinit...")
-    # Q_init = torch.tensor(np.load(args.Qinit_path))
-    # print(f"Qinit shape: {Q_init.shape}")
+    # get A (CS)
+    print("getting A...")
+    A = torch.tensor(np.load(os.path.join(args.out_dir, "A.npy")))
+
+    # calc Qinit (CS)
+    print("getting Qinit...")
+    Q_init = torch.tensor(np.load(os.path.join(args.out_dir, "Qinit.npy")))
+    print(f"Qinit shape: {Q_init.shape}")
 
     # get min and max
     # min_val, max_val = get_min_max_data(Q_init, qinit_dataloader)
@@ -137,5 +144,5 @@ if __name__ == "__main__":
     dataloader = DataLoader(dataset, batch_size=1, shuffle=True, num_workers=2)
 
     # call reconstruction (CS)
-    # reconstruct_CS(model, reward_conv, Q_init, min_val, max_val, args.tmax, dataloader, actions, device, args.out_dir)
-    reconstruct_denoise(model, reward_conv, args.tmax, dataloader, apply_action, device, args.out_dir)
+    reconstruct_CS(model, reward_conv, A, Q_init, args.tmax, dataloader, apply_action, device, args.out_dir)
+    # reconstruct_denoise(model, reward_conv, args.tmax, dataloader, apply_action, device, args.out_dir)
