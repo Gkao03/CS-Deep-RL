@@ -23,6 +23,7 @@ def reconstruct_CS(model, reward_conv, A, Q_init, tmax, dataloader, apply_action
     # just get 1 image from dataloader
     for target_state, _, state_y in dataloader:
         curr_state = torch.matmul(Q_init, state_y).reshape(-1, 1, args.image_size, args.image_size)
+        state_y = state_y.to(device)
 
         for _ in range(tmax):
             curr_state = curr_state.to(device)
