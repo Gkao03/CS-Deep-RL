@@ -228,7 +228,7 @@ def run_CS(args, device):
 
         # CS
         curr_state = torch.matmul(Q_init, state_y).reshape(-1, 1, args.image_size, args.image_size)
-        # curr_state = rescale_tensor_01(curr_state, min_val, max_val)
+        curr_state = rescale_tensor_01(curr_state)
 
         # saved output
         policies = []
