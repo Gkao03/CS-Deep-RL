@@ -1,4 +1,5 @@
 import time
+import os
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -11,6 +12,10 @@ from config import Args, ActionSpace
 from utils import get_device, get_min_max_data, rescale_tensor_01, np_to_image_save, scale_array_uint8
 from actions import ApplyAction
 from data import *
+
+
+# visible devices
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 
 def reconstruct_CS(model, reward_conv, A, Q_init, tmax, dataloader, apply_action, device, out_dir):
