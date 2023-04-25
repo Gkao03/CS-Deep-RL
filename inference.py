@@ -15,7 +15,7 @@ from data import *
 
 
 # visible devices
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 
 
 def reconstruct_CS(model, reward_conv, A, Q_init, tmax, dataloader, apply_action, device, out_dir):
@@ -66,14 +66,18 @@ def reconstruct_CS(model, reward_conv, A, Q_init, tmax, dataloader, apply_action
     print("DONE")
 
 
-def reconstruct_denoise(model, reward_conv, tmax, dataloader, apply_action, device, out_dir):
+def reconstruct_denoise(model, reward_conv, tmax, dataloader, apply_action, device, out_dir, num_images=1):
+    img_counter = 0
     model = model.to(device)
     reward_conv = reward_conv.to(device)
     model.eval()
     reward_conv.eval()
 
-    # just get 1 image from dataloader
+
     for target_state, curr_state in dataloader:
+        if img_counter >= num_images:
+            break
+
         save_image(curr_state, os.path.join(out_dir, "noisy.png"))
 
         for _ in range(tmax):
@@ -103,7 +107,8 @@ def reconstruct_denoise(model, reward_conv, tmax, dataloader, apply_action, devi
         # np_to_image_save(reconstructed, os.path.join(out_dir, "reconstructed.png"))
         save_image(original, os.path.join(out_dir, "original.png"))
         save_image(reconstructed, os.path.join(out_dir, "reconstructed.png"))
-        break
+
+        img_counter += 1
 
     print("DONE")
 
