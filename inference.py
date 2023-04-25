@@ -78,7 +78,7 @@ def reconstruct_denoise(model, reward_conv, tmax, dataloader, apply_action, devi
         if img_counter >= num_images:
             break
 
-        save_image(curr_state, os.path.join(out_dir, "noisy.png"))
+        save_image(curr_state, os.path.join(out_dir, f"noisy_{img_counter}.png"))
 
         for _ in range(tmax):
             curr_state = curr_state.to(device)
@@ -105,8 +105,8 @@ def reconstruct_denoise(model, reward_conv, tmax, dataloader, apply_action, devi
 
         # np_to_image_save(original, os.path.join(out_dir, "original.png"))
         # np_to_image_save(reconstructed, os.path.join(out_dir, "reconstructed.png"))
-        save_image(original, os.path.join(out_dir, "original.png"))
-        save_image(reconstructed, os.path.join(out_dir, "reconstructed.png"))
+        save_image(original, os.path.join(out_dir, f"original_{img_counter}.png"))
+        save_image(reconstructed, os.path.join(out_dir, f"reconstructed_{img_counter}.png"))
 
         img_counter += 1
 
