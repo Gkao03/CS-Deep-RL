@@ -153,4 +153,4 @@ if __name__ == "__main__":
 
     # call reconstruction (CS)
     # reconstruct_CS(model, reward_conv, A, Q_init, args.tmax, dataloader, apply_action, device, args.out_dir)
-    reconstruct_denoise(model, reward_conv, args.tmax, dataloader, apply_action, device, args.out_dir)
+    reconstruct_denoise(model, reward_conv, args.tmax, dataloader, apply_action, device, args.out_dir, 3)
