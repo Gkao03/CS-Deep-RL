@@ -119,26 +119,20 @@ if __name__ == "__main__":
     np.random.seed(args.seed)
     device = get_device(args.device_num)
 
-    # data related stuff (CS)
-    # A = np.load(args.A_path)
-    # transform = get_transform(args.image_size)
-    # dataset = MyCSDataset(args.data_dir, A, transform=transform)
-    # qinit_dataloader = DataLoader(dataset, batch_size=1, shuffle=False, num_workers=2)
-
     # get A (CS)
     print("getting A...")
     A = np.load(os.path.join(args.out_dir, "A.npy"))
 
     # data related stuff (denoising)
     transform = get_transform(args.image_size, train=True)  # train False for denoise/ train True for CS
-    # dataset = MyNoisyDataset(args.data_dir, transform=transform)  # denoise
-    dataset = MyCSDataset(args.data_dir, A, transform=transform)
+    dataset = MyNoisyDataset(args.data_dir, transform=transform)  # denoise
+    # dataset = MyCSDataset(args.data_dir, A, transform=transform)  # CS
     dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True, num_workers=2)
 
     # calc Qinit (CS)
-    print("getting Qinit...")
-    Q_init = torch.tensor(np.load(os.path.join(args.out_dir, "Qinit.npy")))
-    print(f"Qinit shape: {Q_init.shape}")
+    # print("getting Qinit...")
+    # Q_init = torch.tensor(np.load(os.path.join(args.out_dir, "Qinit.npy")))
+    # print(f"Qinit shape: {Q_init.shape}")
 
     # get min and max
     # min_val, max_val = get_min_max_data(Q_init, qinit_dataloader)
@@ -158,5 +152,5 @@ if __name__ == "__main__":
     dataloader = DataLoader(dataset, batch_size=1, shuffle=True, num_workers=2)
 
     # call reconstruction (CS)
-    reconstruct_CS(model, reward_conv, A, Q_init, args.tmax, dataloader, apply_action, device, args.out_dir)
-    # reconstruct_denoise(model, reward_conv, args.tmax, dataloader, apply_action, device, args.out_dir)
+    # reconstruct_CS(model, reward_conv, A, Q_init, args.tmax, dataloader, apply_action, device, args.out_dir)
+    reconstruct_denoise(model, reward_conv, args.tmax, dataloader, apply_action, device, args.out_dir)
