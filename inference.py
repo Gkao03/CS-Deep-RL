@@ -120,8 +120,8 @@ if __name__ == "__main__":
     device = get_device(args.device_num)
 
     # get A (CS)
-    print("getting A...")
-    A = np.load(os.path.join(args.out_dir, "A.npy"))
+    # print("getting A...")
+    # A = np.load(os.path.join(args.out_dir, "A.npy"))
 
     # data related stuff (denoising)
     transform = get_transform(args.image_size, train=True)  # train False for denoise/ train True for CS
